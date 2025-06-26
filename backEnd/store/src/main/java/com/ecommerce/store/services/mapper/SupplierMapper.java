@@ -19,6 +19,7 @@ public class SupplierMapper {
 
     public SupplierCreateRequestDto toDto(Supplier entity) {
         SupplierCreateRequestDto dto = new SupplierCreateRequestDto();
+        dto.setCnpj(entity.getCnpj());
         dto.setName(entity.getName());
         dto.setPhone_number(entity.getPhone_number());
         dto.setEmail(entity.getEmail());

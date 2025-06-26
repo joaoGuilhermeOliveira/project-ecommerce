@@ -19,4 +19,8 @@ public class SupplierService {
         Supplier supplier = mapper.toEntity(supplierCreateRequestDto);
         return supplierRepository.save(supplier);
     }
+
+    public Supplier getSupplierByCnpj(String cnpj) {
+        return supplierRepository.findByCnpj(cnpj);
+    }
 }

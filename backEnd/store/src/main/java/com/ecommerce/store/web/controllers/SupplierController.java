@@ -10,20 +10,19 @@ import com.ecommerce.store.web.dtos.request.CustomerRequestDto;
 import com.ecommerce.store.web.dtos.request.SupplierCreateRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/supliers")
 public class SupplierController {
 
     private final SupplierService supplierService;
+    private final SupplierMapper supplierMapper;
 
     @Autowired
     public SupplierController(SupplierService supplierService) {
         this.supplierService = supplierService;
+        this.supplierMapper = new SupplierMapper();
     }
     @PostMapping
     public ResponseEntity<String> createSupplier(@RequestBody SupplierCreateRequestDto supplierCreateRequestDto) {
@@ -31,4 +30,13 @@ public class SupplierController {
         return ResponseEntity.status(201).body("Supplier created successfully");
     }
 
+    @GetMapping
+    public ResponseEntity<SupplierCreateRequestDto> getUserByCnpj(@RequestParam String cnpj) {
+        Supplier supplier = supplierService.getSupplierByCnpj(cnpj);
+        if (supplier == null) {
+            return ResponseEntity.notFound().build();
+        }
+        SupplierCreateRequestDto response = supplierMapper.toDto(supplier);
+        return ResponseEntity.ok(response);
+    }
 }
