@@ -1,6 +1,8 @@
 package com.ecommerce.store.web.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +19,7 @@ public class CustomerController {
 
     private final CustomerService customerService;
     private final CustomerMapper customerMapper;
-    
+
     @Autowired
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
@@ -25,9 +27,9 @@ public class CustomerController {
     }
 
     @PostMapping
-    public Customer createCustomer(@RequestBody CustomerRequestDto customer) {
-        return customerService.createCustomer(customerMapper.toEntity(customer));
+    public ResponseEntity<String> createCustomer(@RequestBody CustomerRequestDto customer) {
+        customerService.createCustomer(customerMapper.toEntity(customer));
+        return ResponseEntity.status(201).body("Customer created successfully!");
     }
 
-    
 }
