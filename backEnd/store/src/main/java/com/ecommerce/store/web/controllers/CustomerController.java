@@ -8,18 +8,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.store.entities.Customer;
 import com.ecommerce.store.services.CustomerService;
+import com.ecommerce.store.services.mapper.CustomerMapper;
+import com.ecommerce.store.web.dtos.request.CustomerRequestDto;
 
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
+
+    private final CustomerService customerService;
+    private final CustomerMapper customerMapper;
     
     @Autowired
-    private CustomerService customerService;
-
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
+        this.customerMapper = new CustomerMapper();
+    }
 
     @PostMapping
-    public Customer createCustomer(@RequestBody Customer customer) {
-        return customerService.createCustomer(customer);
+    public Customer createCustomer(@RequestBody CustomerRequestDto customer) {
+        return customerService.createCustomer(customerMapper.toEntity(customer));
     }
 
     
