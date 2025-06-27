@@ -23,4 +23,10 @@ public class SupplierService {
     public Supplier getSupplierByCnpj(String cnpj) {
         return supplierRepository.findByCnpj(cnpj);
     }
+
+    public void deleteSupplier(Supplier supplier) {
+        supplierRepository.delete(supplier);
+    }
+
+    
 }

@@ -26,7 +26,7 @@ public class SupplierController {
         return ResponseEntity.status(201).body("Supplier created successfully");
     }
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<SupplierCreateDto> getUserByCnpj(@RequestParam String cnpj) {
         Supplier supplier = supplierService.getSupplierByCnpj(cnpj);
         if (supplier == null) {
@@ -34,6 +34,16 @@ public class SupplierController {
         }
         SupplierCreateDto response = supplierMapper.toDto(supplier);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{cnpj}")
+    public ResponseEntity<String> deleteSupplier(@PathVariable String cnpj) {
+        Supplier supplier = supplierService.getSupplierByCnpj(cnpj);
+        if (supplier == null) {
+            return ResponseEntity.notFound().build();
+        }
+            supplierService.deleteSupplier(supplier);
+        return ResponseEntity.ok("Supplier deleted successfully");
     }
 
 }
