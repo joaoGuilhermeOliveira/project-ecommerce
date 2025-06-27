@@ -4,7 +4,7 @@ import com.ecommerce.store.entities.Address;
 import lombok.Data;
 
 @Data
-public class SupplierCreateRequestDto {
+public class SupplierCreateDto {
 
     private String cnpj;
     private String name;

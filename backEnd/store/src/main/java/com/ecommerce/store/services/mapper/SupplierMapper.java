@@ -3,10 +3,10 @@ package com.ecommerce.store.services.mapper;
 
 
 import com.ecommerce.store.entities.Supplier;
-import com.ecommerce.store.web.dtos.request.SupplierCreateRequestDto;
+import com.ecommerce.store.web.dtos.request.SupplierCreateDto;
 
 public class SupplierMapper {
-    public Supplier toEntity(SupplierCreateRequestDto dto) {
+    public Supplier toEntity(SupplierCreateDto dto) {
         Supplier supplier = new Supplier();
         supplier.setCnpj(dto.getCnpj());
         supplier.setName(dto.getName());
@@ -17,8 +17,8 @@ public class SupplierMapper {
 
     }
 
-    public SupplierCreateRequestDto toDto(Supplier entity) {
-        SupplierCreateRequestDto dto = new SupplierCreateRequestDto();
+    public SupplierCreateDto toDto(Supplier entity) {
+        SupplierCreateDto dto = new SupplierCreateDto();
         dto.setCnpj(entity.getCnpj());
         dto.setName(entity.getName());
         dto.setPhone_number(entity.getPhone_number());
