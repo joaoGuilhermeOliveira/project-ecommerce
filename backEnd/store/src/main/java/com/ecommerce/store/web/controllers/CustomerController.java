@@ -37,7 +37,7 @@ public class CustomerController {
     @GetMapping
     public ResponseEntity<CustomerDto> getCustomerByCpf(@RequestParam String cpf) {
         CustomerDto response = customerMapper.toDto(customerService.getCustomerByCpf(cpf));
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok().body(response);
     }
 
     @PatchMapping
