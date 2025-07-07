@@ -2,7 +2,9 @@ package com.ecommerce.store.services.mapper;
 
 import com.ecommerce.store.entities.Customer;
 import com.ecommerce.store.web.dtos.request.CustomerDto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CustomerMapper {
     
     public Customer toEntity(CustomerDto customerRequestDto) {
