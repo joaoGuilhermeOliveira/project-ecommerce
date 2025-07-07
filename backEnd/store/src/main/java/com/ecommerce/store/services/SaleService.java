@@ -9,6 +9,8 @@ import com.ecommerce.store.web.dtos.request.SaleDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SaleService {
 
@@ -27,5 +29,14 @@ public class SaleService {
         Sale sale = saleMapper.toEntity(saleDto);
         sale.setCustomer(customer);
         return saleRepository.save(sale);
+    }
+
+    public Sale getSaleById(Long saleId) {
+        return saleRepository.findById(saleId)
+                .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
+    }
+
+    public List<Sale> getAllSales() {
+        return saleRepository.findAll();
     }
 }
