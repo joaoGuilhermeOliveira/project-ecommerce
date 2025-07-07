@@ -32,6 +32,7 @@ public class SaleMapper {
         dto.setFreightPrice(entity.getFreightPrice());
         dto.setTotalPice(entity.getTotalPice());
         dto.setSaleValue(entity.getSaleValue());
+        dto.setSaleId(entity.getSaleId());
 
         if (entity.getCustomer() != null) {
             CustomerDto customerDto = new CustomerDto();
