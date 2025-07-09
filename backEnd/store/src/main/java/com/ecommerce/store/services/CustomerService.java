@@ -1,11 +1,14 @@
 package com.ecommerce.store.services;
 
+import com.ecommerce.store.entities.Sale;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ecommerce.store.entities.Address;
 import com.ecommerce.store.entities.Customer;
 import com.ecommerce.store.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CustomerService {
@@ -68,5 +71,8 @@ public class CustomerService {
 
         return address;
 
+    }
+    public List<Customer> getAllCustomers(){
+        return customerRepository.findAll();
     }
 }
