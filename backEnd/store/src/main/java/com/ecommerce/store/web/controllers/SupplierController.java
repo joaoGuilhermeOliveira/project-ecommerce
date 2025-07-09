@@ -3,10 +3,12 @@ package com.ecommerce.store.web.controllers;
 import com.ecommerce.store.entities.Supplier;
 import com.ecommerce.store.services.SupplierService;
 import com.ecommerce.store.services.mapper.SupplierMapper;
-import com.ecommerce.store.web.dtos.request.SupplierCreateDto;
+import com.ecommerce.store.web.dtos.request.SupplierDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/supliers")
@@ -21,18 +23,27 @@ public class SupplierController {
         this.supplierMapper = new SupplierMapper();
     }
     @PostMapping
-    public ResponseEntity<String> createSupplier(@RequestBody SupplierCreateDto supplierCreateDto) {
-        Supplier response = supplierService.createSupplier(supplierCreateDto);
+    public ResponseEntity<String> createSupplier(@RequestBody SupplierDto supplierDto) {
+        Supplier response = supplierService.createSupplier(supplierDto);
         return ResponseEntity.status(201).body("Supplier created successfully");
     }
 
-    @GetMapping()
-    public ResponseEntity<SupplierCreateDto> getUserByCnpj(@RequestParam String cnpj) {
+    @GetMapping("/{cnpj}")
+    public ResponseEntity<SupplierDto> getUserByCnpj(@PathVariable String cnpj) {
         Supplier supplier = supplierService.getSupplierByCnpj(cnpj);
         if (supplier == null) {
             return ResponseEntity.notFound().build();
         }
-        SupplierCreateDto response = supplierMapper.toDto(supplier);
+        SupplierDto response = supplierMapper.toDto(supplier);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<SupplierDto>> getSupplierAll() {
+        List<Supplier> suppliers = supplierService.getAllSuppliers();
+        List<SupplierDto> response = suppliers.stream()
+                .map(supplierMapper::toDto)
+                .toList();
         return ResponseEntity.ok(response);
     }
 
