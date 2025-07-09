@@ -42,6 +42,9 @@ public class CustomerService {
         customer.setBirthDate(
                 updateCustomer.getBirthDate() != null ? updateCustomer.getBirthDate() : customer.getBirthDate());
 
+        customer.setPassword(
+                updateCustomer.getPassword() != null ? updateCustomer.getPassword() : customer.getPassword());
+
         customerRepository.save(customer);
     }
 

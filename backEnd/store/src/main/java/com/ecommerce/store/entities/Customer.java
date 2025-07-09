@@ -37,6 +37,9 @@ public class Customer {
     @Column(name = "phone", nullable = false, length = 18)
     private String phone;
 
+    @Column(name = "password", nullable = false, length = 100)
+    private String password;
+
     @OneToMany(mappedBy = "customer")
     private List<Sale> sales;
 }

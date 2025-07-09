@@ -15,7 +15,7 @@ public class CustomerMapper {
         customer.setAddress(customerRequestDto.getAddress());
         customer.setBirthDate(customerRequestDto.getBirthDate());
         customer.setPhone(customerRequestDto.getPhone());
-
+        customer.setPassword(customerRequestDto.getPassword());
         return customer;
     }
 
@@ -28,7 +28,7 @@ public class CustomerMapper {
         customerRequestDto.setAddress(customer.getAddress());
         customerRequestDto.setBirthDate(customer.getBirthDate());
         customerRequestDto.setPhone(customer.getPhone());
-
+        customerRequestDto.setPassword(customer.getPassword());
         return customerRequestDto;
     }
 }
