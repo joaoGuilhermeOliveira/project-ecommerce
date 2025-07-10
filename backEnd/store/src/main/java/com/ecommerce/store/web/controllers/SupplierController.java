@@ -5,9 +5,10 @@ import com.ecommerce.store.services.SupplierService;
 import com.ecommerce.store.services.mapper.SupplierMapper;
 import com.ecommerce.store.web.dtos.request.SupplierDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,10 +24,11 @@ public class SupplierController {
         this.supplierMapper = new SupplierMapper();
     }
     @PostMapping
-    public ResponseEntity<String> createSupplier(@RequestBody SupplierDto supplierDto) {
-        Supplier response = supplierService.createSupplier(supplierDto);
-        return ResponseEntity.status(201).body("Supplier created successfully");
+    public ResponseEntity<String> createSupplier(@RequestBody @Valid SupplierDto supplierDto) {
+        supplierService.createSupplier(supplierDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Fornecedor criado com sucesso");
     }
+
 
     @GetMapping("/{cnpj}")
     public ResponseEntity<SupplierDto> getUserByCnpj(@PathVariable String cnpj) {
@@ -49,12 +51,8 @@ public class SupplierController {
 
     @DeleteMapping("/{cnpj}")
     public ResponseEntity<String> deleteSupplier(@PathVariable String cnpj) {
-        Supplier supplier = supplierService.getSupplierByCnpj(cnpj);
-        if (supplier == null) {
-            return ResponseEntity.notFound().build();
-        }
-            supplierService.deleteSupplier(supplier);
-        return ResponseEntity.ok("Supplier deleted successfully");
+        supplierService.deleteSupplierByCnpj(cnpj);
+        return ResponseEntity.ok("Fornecedor deletado com sucesso");
     }
 
 }
