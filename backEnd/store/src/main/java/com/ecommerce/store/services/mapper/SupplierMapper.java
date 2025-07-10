@@ -1,10 +1,11 @@
 package com.ecommerce.store.services.mapper;
 
-
+import org.springframework.stereotype.Component;
 
 import com.ecommerce.store.entities.Supplier;
 import com.ecommerce.store.web.dtos.request.SupplierCreateDto;
 
+@Component
 public class SupplierMapper {
     public Supplier toEntity(SupplierCreateDto dto) {
         Supplier supplier = new Supplier();

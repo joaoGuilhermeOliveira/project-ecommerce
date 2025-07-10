@@ -13,4 +13,5 @@ public class CustomerDto {
     private Address address;
     private String birthDate;
     private String phone;
+    private String password;
 }

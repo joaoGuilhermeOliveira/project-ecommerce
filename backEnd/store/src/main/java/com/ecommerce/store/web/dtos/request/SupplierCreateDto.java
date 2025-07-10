@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class SupplierCreateDto {
-
+    private Long id;
     private String cnpj;
     private String name;
     private String phone_number;
