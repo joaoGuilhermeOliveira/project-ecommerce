@@ -1,6 +1,7 @@
 package com.ecommerce.store.services;
 
 import com.ecommerce.store.entities.Supplier;
+import com.ecommerce.store.exceptions.supplier.SupplierNotFoundException;
 import com.ecommerce.store.repositories.SupplierRepository;
 import com.ecommerce.store.services.mapper.SupplierMapper;
 import com.ecommerce.store.web.dtos.request.SupplierDto;
@@ -23,7 +24,7 @@ public class SupplierService {
     }
 
     public Supplier getSupplierByCnpj(String cnpj) {
-        return supplierRepository.findByCnpj(cnpj);
+        return supplierRepository.findByCnpj(cnpj).orElseThrow(() -> new SupplierNotFoundException("Fornecedor não encontrado com CNPJ: " + cnpj));
     }
 
     public List<Supplier> getAllSuppliers() {
