@@ -3,7 +3,7 @@ package com.ecommerce.store.services.mapper;
 
 
 import com.ecommerce.store.entities.Supplier;
-import com.ecommerce.store.web.dtos.request.SupplierDto;
+import com.ecommerce.store.web.dtos.requests.SupplierDto;
 import org.springframework.stereotype.Component;
 
 @Component

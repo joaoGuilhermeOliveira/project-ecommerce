@@ -3,7 +3,7 @@ package com.ecommerce.store.web.controllers;
 import com.ecommerce.store.entities.Sale;
 import com.ecommerce.store.services.SaleService;
 import com.ecommerce.store.services.mapper.SaleMapper;
-import com.ecommerce.store.web.dtos.request.SaleDto;
+import com.ecommerce.store.web.dtos.requests.SaleRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,26 +24,26 @@ public class SaleController {
     }
 
     @PostMapping
-    public ResponseEntity<SaleDto> createSale(@RequestBody SaleDto saleDto) {
-        Sale sale = saleService.createSale(saleDto);
-        SaleDto response = saleMapper.toDto(sale);
+    public ResponseEntity<SaleRequestDto> createSale(@RequestBody SaleRequestDto saleRequestDto) {
+        Sale sale = saleService.createSale(saleRequestDto);
+        SaleRequestDto response = saleMapper.toDto(sale);
         return ResponseEntity.status(201).body(response);
     }
 
     @GetMapping("/{saleId}")
-    public ResponseEntity<SaleDto> getSaleById(@PathVariable Long saleId) {
+    public ResponseEntity<SaleRequestDto> getSaleById(@PathVariable Long saleId) {
         Sale sale = saleService.getSaleById(saleId);
         if (sale == null) {
             return ResponseEntity.notFound().build();
         }
-        SaleDto response = saleMapper.toDto(sale);
+        SaleRequestDto response = saleMapper.toDto(sale);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<SaleDto>> getSales(){
+    public ResponseEntity<List<SaleRequestDto>> getSales(){
         List<Sale> sales = saleService.getAllSales();
-        List<SaleDto> response = sales.stream()
+        List<SaleRequestDto> response = sales.stream()
                 .map(saleMapper::toDto)
                 .toList();
         return ResponseEntity.ok(response);

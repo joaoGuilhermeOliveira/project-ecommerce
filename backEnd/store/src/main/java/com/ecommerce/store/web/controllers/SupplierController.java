@@ -3,7 +3,7 @@ package com.ecommerce.store.web.controllers;
 import com.ecommerce.store.entities.Supplier;
 import com.ecommerce.store.services.SupplierService;
 import com.ecommerce.store.services.mapper.SupplierMapper;
-import com.ecommerce.store.web.dtos.request.SupplierDto;
+import com.ecommerce.store.web.dtos.requests.SupplierDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,13 +1,13 @@
 package com.ecommerce.store.services.mapper;
 
 import com.ecommerce.store.entities.Customer;
-import com.ecommerce.store.web.dtos.request.CustomerDto;
+import com.ecommerce.store.web.dtos.requests.CustomerRequestDto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CustomerMapper {
     
-    public Customer toEntity(CustomerDto customerRequestDto) {
+    public Customer toEntity(CustomerRequestDto customerRequestDto) {
         Customer customer = new Customer();
         customer.setName(customerRequestDto.getName());
         customer.setCpf(customerRequestDto.getCpf());
@@ -19,8 +19,8 @@ public class CustomerMapper {
         return customer;
     }
 
-    public CustomerDto toDto (Customer customer) {
-        CustomerDto customerRequestDto = new CustomerDto();
+    public CustomerRequestDto toDto (Customer customer) {
+        CustomerRequestDto customerRequestDto = new CustomerRequestDto();
         customerRequestDto.setId(customer.getId());
         customerRequestDto.setName(customer.getName());
         customerRequestDto.setCpf(customer.getCpf());
