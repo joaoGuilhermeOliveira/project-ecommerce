@@ -4,6 +4,7 @@ package com.ecommerce.store.services.mapper;
 
 import com.ecommerce.store.entities.Supplier;
 import com.ecommerce.store.web.dtos.requests.SupplierRequestDto;
+import com.ecommerce.store.web.dtos.responses.SupplierResponseDto;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,13 +20,11 @@ public class SupplierMapper {
 
     }
 
-    public SupplierRequestDto toDto(Supplier entity) {
-        SupplierRequestDto dto = new SupplierRequestDto();
+    public SupplierResponseDto toDto(Supplier entity) {
+        SupplierResponseDto dto = new SupplierResponseDto();
         dto.setCnpj(entity.getCnpj());
         dto.setName(entity.getName());
-        dto.setPhone_number(entity.getPhone_number());
         dto.setEmail(entity.getEmail());
-        dto.setAddress(entity.getAddress());
         return dto;
     }
 }
