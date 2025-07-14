@@ -18,6 +18,6 @@ public class SaleResponseDto {
 
     private String freightPrice;
 
-    private String totalPice;
+    private String totalPrice;
 
 }

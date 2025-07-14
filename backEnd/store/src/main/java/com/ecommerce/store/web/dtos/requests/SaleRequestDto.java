@@ -18,7 +18,7 @@ public class SaleRequestDto {
 
     private String freightPrice;
 
-    private String totalPice;
+    private String totalPrice;
 
     private CustomerRequestDto customer;
 
