@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class SupplierDto {
+public class SupplierRequestDto {
 
     @NotBlank(message = "CNPJ é obrigatório")
     private String cnpj;

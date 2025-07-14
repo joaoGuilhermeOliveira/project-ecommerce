@@ -5,7 +5,7 @@ import com.ecommerce.store.exceptions.supplier.InvalidSupplierException;
 import com.ecommerce.store.exceptions.supplier.SupplierNotFoundException;
 import com.ecommerce.store.repositories.SupplierRepository;
 import com.ecommerce.store.services.mapper.SupplierMapper;
-import com.ecommerce.store.web.dtos.requests.SupplierDto;
+import com.ecommerce.store.web.dtos.requests.SupplierRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -17,10 +17,10 @@ public class SupplierService {
     @Autowired
     SupplierRepository supplierRepository;
 
-    public Supplier createSupplier(SupplierDto supplierDto) {
+    public Supplier createSupplier(SupplierRequestDto supplierRequestDto) {
         try {
             SupplierMapper mapper = new SupplierMapper();
-            Supplier supplier = mapper.toEntity(supplierDto);
+            Supplier supplier = mapper.toEntity(supplierRequestDto);
             return supplierRepository.save(supplier);
         } catch (DataIntegrityViolationException e) {
             throw new InvalidSupplierException("Erro ao criar fornecedor: " + e.getMessage());
