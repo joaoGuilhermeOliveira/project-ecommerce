@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 public class SaleDto {
 
-    private Long saleId;
+    private Long id;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date SaleData;

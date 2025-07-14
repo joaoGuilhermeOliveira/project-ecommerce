@@ -17,9 +17,9 @@ public class SaleMapper {
         sale.setTotalPice(dto.getTotalPice());
         sale.setSaleValue(dto.getSaleValue());
 
-        if (dto.getCustomer() != null && dto.getCustomer().getCustomerId() != null) {
+        if (dto.getCustomer() != null && dto.getCustomer().getId() != null) {
             Customer customer = new Customer();
-            customer.setCustomerId(dto.getCustomer().getCustomerId());
+            customer.setId(dto.getCustomer().getId());
             sale.setCustomer(customer);
         }
 
@@ -32,11 +32,11 @@ public class SaleMapper {
         dto.setFreightPrice(entity.getFreightPrice());
         dto.setTotalPice(entity.getTotalPice());
         dto.setSaleValue(entity.getSaleValue());
-        dto.setSaleId(entity.getSaleId());
+        dto.setId(entity.getId());
 
         if (entity.getCustomer() != null) {
             CustomerDto customerDto = new CustomerDto();
-            customerDto.setCustomerId(entity.getCustomer().getCustomerId());
+            customerDto.setId(entity.getCustomer().getId());
             customerDto.setName(entity.getCustomer().getName());
             customerDto.setCpf(entity.getCustomer().getCpf());
             customerDto.setEmail(entity.getCustomer().getEmail());

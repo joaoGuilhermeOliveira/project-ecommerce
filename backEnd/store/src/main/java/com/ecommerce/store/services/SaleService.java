@@ -24,7 +24,7 @@ public class SaleService {
     private SaleMapper saleMapper;
 
     public Sale createSale(SaleDto saleDto) {
-        Customer customer = customerRepository.findById(saleDto.getCustomer().getCustomerId())
+        Customer customer = customerRepository.findById(saleDto.getCustomer().getId())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
         Sale sale = saleMapper.toEntity(saleDto);
         sale.setCustomer(customer);

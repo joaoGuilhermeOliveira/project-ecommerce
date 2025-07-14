@@ -14,7 +14,7 @@ public class Supplier implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "supplierId",nullable = false)
-    private Long supplierId;
+    private Long id;
     @Column(name = "cnpj", nullable = false, length = 14)
     private String cnpj;
     @Column(name = "name", nullable = false, length = 200)

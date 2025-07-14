@@ -21,7 +21,7 @@ public class CustomerMapper {
 
     public CustomerDto toDto (Customer customer) {
         CustomerDto customerRequestDto = new CustomerDto();
-        customerRequestDto.setCustomerId(customer.getCustomerId());
+        customerRequestDto.setId(customer.getId());
         customerRequestDto.setName(customer.getName());
         customerRequestDto.setCpf(customer.getCpf());
         customerRequestDto.setEmail(customer.getEmail());
