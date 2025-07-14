@@ -4,6 +4,7 @@ import com.ecommerce.store.entities.Supplier;
 import com.ecommerce.store.services.SupplierService;
 import com.ecommerce.store.services.mapper.SupplierMapper;
 import com.ecommerce.store.web.dtos.requests.SupplierRequestDto;
+import com.ecommerce.store.web.dtos.responses.SupplierResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,19 +32,19 @@ public class SupplierController {
 
 
     @GetMapping("/{cnpj}")
-    public ResponseEntity<SupplierRequestDto> getUserByCnpj(@PathVariable String cnpj) {
+    public ResponseEntity<SupplierResponseDto> getUserByCnpj(@PathVariable String cnpj) {
         Supplier supplier = supplierService.getSupplierByCnpj(cnpj);
         if (supplier == null) {
             return ResponseEntity.notFound().build();
         }
-        SupplierRequestDto response = supplierMapper.toDto(supplier);
+        SupplierResponseDto response = supplierMapper.toDto(supplier);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping()
-    public ResponseEntity<List<SupplierRequestDto>> getSupplierAll() {
+    public ResponseEntity<List<SupplierResponseDto>> getSupplierAll() {
         List<Supplier> suppliers = supplierService.getAllSuppliers();
-        List<SupplierRequestDto> response = suppliers.stream()
+        List<SupplierResponseDto> response = suppliers.stream()
                 .map(supplierMapper::toDto)
                 .toList();
         return ResponseEntity.ok(response);

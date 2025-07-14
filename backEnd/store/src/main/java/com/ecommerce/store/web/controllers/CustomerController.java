@@ -1,5 +1,6 @@
 package com.ecommerce.store.web.controllers;
 
+import com.ecommerce.store.web.dtos.responses.CustomerResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +32,8 @@ public class CustomerController {
     }
 
     @GetMapping("/{cpf}")
-    public ResponseEntity<CustomerRequestDto> getCustomerByCpf(@PathVariable String cpf) {
-        CustomerRequestDto response = customerMapper.toDto(customerService.getCustomerByCpf(cpf));
+    public ResponseEntity<CustomerResponseDto> getCustomerByCpf(@PathVariable String cpf) {
+        CustomerResponseDto response = customerMapper.toDto(customerService.getCustomerByCpf(cpf));
         return ResponseEntity.ok(response);
     }
 
@@ -44,9 +45,9 @@ public class CustomerController {
         return ResponseEntity.status(200).body("Customer updated successfully!");
     }
     @GetMapping
-    public ResponseEntity<List<CustomerRequestDto>> getAllCustomers() {
+    public ResponseEntity<List<CustomerResponseDto>> getAllCustomers() {
         List<Customer> customers = customerService.getAllCustomers();
-        List<CustomerRequestDto> response = customers.stream()
+        List<CustomerResponseDto> response = customers.stream()
                 .map(customerMapper::toDto)
                 .toList();
         return ResponseEntity.ok(response);
