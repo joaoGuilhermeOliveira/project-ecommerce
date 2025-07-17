@@ -2,50 +2,38 @@ package com.ecommerce.store.services.mapper;
 
 import com.ecommerce.store.entities.Customer;
 import com.ecommerce.store.entities.Sale;
-import com.ecommerce.store.web.dtos.request.CustomerDto;
-import com.ecommerce.store.web.dtos.request.SaleDto;
+import com.ecommerce.store.web.dtos.requests.CustomerRequestDto;
+import com.ecommerce.store.web.dtos.requests.SaleRequestDto;
+import com.ecommerce.store.web.dtos.responses.SaleResponseDto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SaleMapper {
 
 
-    public Sale toEntity(SaleDto dto) {
+    public Sale toEntity(SaleRequestDto dto) {
         Sale sale = new Sale();
         sale.setSaleData(dto.getSaleData());
         sale.setFreightPrice(dto.getFreightPrice());
-        sale.setTotalPice(dto.getTotalPice());
+        sale.setTotalPice(dto.getTotalPrice());
         sale.setSaleValue(dto.getSaleValue());
 
-        if (dto.getCustomer() != null && dto.getCustomer().getCustomerId() != null) {
+        if (dto.getCustomer() != null && dto.getCustomer().getId() != null) {
             Customer customer = new Customer();
-            customer.setCustomerId(dto.getCustomer().getCustomerId());
+            customer.setId(dto.getCustomer().getId());
             sale.setCustomer(customer);
         }
 
         return sale;
     }
 
-    public SaleDto toDto(Sale entity) {
-        SaleDto dto = new SaleDto();
+    public SaleResponseDto toDto(Sale entity) {
+        SaleResponseDto dto = new SaleResponseDto();
         dto.setSaleData(entity.getSaleData());
         dto.setFreightPrice(entity.getFreightPrice());
-        dto.setTotalPice(entity.getTotalPice());
+        dto.setTotalPrice(entity.getTotalPice());
         dto.setSaleValue(entity.getSaleValue());
-        dto.setSaleId(entity.getSaleId());
-
-        if (entity.getCustomer() != null) {
-            CustomerDto customerDto = new CustomerDto();
-            customerDto.setCustomerId(entity.getCustomer().getCustomerId());
-            customerDto.setName(entity.getCustomer().getName());
-            customerDto.setCpf(entity.getCustomer().getCpf());
-            customerDto.setEmail(entity.getCustomer().getEmail());
-            customerDto.setAddress(entity.getCustomer().getAddress());
-            customerDto.setBirthDate(entity.getCustomer().getBirthDate());
-            customerDto.setPhone(entity.getCustomer().getPhone());
-            dto.setCustomer(customerDto);
-        }
-
+        dto.setId(entity.getId());
         return dto;
     }
 }

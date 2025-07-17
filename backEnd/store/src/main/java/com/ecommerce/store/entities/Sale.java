@@ -17,7 +17,7 @@ public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name= "sale_id", nullable = false)
-    private Long saleId;
+    private Long id;
 
     @Column(name= "sale_date")
     private Date SaleData;

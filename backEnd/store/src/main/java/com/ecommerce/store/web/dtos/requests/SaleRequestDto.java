@@ -1,6 +1,5 @@
-package com.ecommerce.store.web.dtos.request;
+package com.ecommerce.store.web.dtos.requests;
 
-import com.ecommerce.store.entities.Customer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -8,9 +7,9 @@ import java.util.Date;
 
 
 @Data
-public class SaleDto {
+public class SaleRequestDto {
 
-    private Long saleId;
+    private Long id;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date SaleData;
@@ -19,8 +18,8 @@ public class SaleDto {
 
     private String freightPrice;
 
-    private String totalPice;
+    private String totalPrice;
 
-    private CustomerDto customer;
+    private CustomerRequestDto customer;
 
 }

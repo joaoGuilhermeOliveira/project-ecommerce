@@ -1,4 +1,4 @@
-package com.ecommerce.store.web.dtos.request;
+package com.ecommerce.store.web.dtos.requests;
 
 import com.ecommerce.store.entities.Address;
 import jakarta.validation.constraints.Email;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class SupplierDto {
+public class SupplierRequestDto {
 
     @NotBlank(message = "CNPJ é obrigatório")
     private String cnpj;

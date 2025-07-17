@@ -1,12 +1,12 @@
-package com.ecommerce.store.web.dtos.request;
+package com.ecommerce.store.web.dtos.requests;
 
 import com.ecommerce.store.entities.Address;
 
 import lombok.Data;
 
 @Data
-public class CustomerDto {
-    private Long customerId;
+public class CustomerRequestDto {
+    private Long id;
     private String name;
     private String cpf;
     private String email;
