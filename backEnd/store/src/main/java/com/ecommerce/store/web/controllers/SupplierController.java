@@ -1,7 +1,7 @@
 package com.ecommerce.store.web.controllers;
 
 import com.ecommerce.store.entities.Supplier;
-import com.ecommerce.store.services.SupplierService;
+import com.ecommerce.store.services.SupplierServiceImpl;
 import com.ecommerce.store.services.mapper.SupplierMapper;
 import com.ecommerce.store.web.dtos.requests.SupplierRequestDto;
 import com.ecommerce.store.web.dtos.responses.SupplierResponseDto;
@@ -16,24 +16,24 @@ import java.util.List;
 @RequestMapping("api/supliers")
 public class SupplierController {
 
-    private final SupplierService supplierService;
+    private final SupplierServiceImpl supplierServiceImpl;
     private final SupplierMapper supplierMapper;
 
     @Autowired
-    public SupplierController(SupplierService supplierService) {
-        this.supplierService = supplierService;
+    public SupplierController(SupplierServiceImpl supplierServiceImpl) {
+        this.supplierServiceImpl = supplierServiceImpl;
         this.supplierMapper = new SupplierMapper();
     }
     @PostMapping
     public ResponseEntity<String> createSupplier(@RequestBody @Valid SupplierRequestDto supplierRequestDto) {
-        supplierService.createSupplier(supplierRequestDto);
+        supplierServiceImpl.createSupplier(supplierRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("Fornecedor criado com sucesso");
     }
 
 
     @GetMapping("/{cnpj}")
     public ResponseEntity<SupplierResponseDto> getUserByCnpj(@PathVariable String cnpj) {
-        Supplier supplier = supplierService.getSupplierByCnpj(cnpj);
+        Supplier supplier = supplierServiceImpl.getSupplierByCnpj(cnpj);
         if (supplier == null) {
             return ResponseEntity.notFound().build();
         }
@@ -43,7 +43,7 @@ public class SupplierController {
 
     @GetMapping()
     public ResponseEntity<List<SupplierResponseDto>> getSupplierAll() {
-        List<Supplier> suppliers = supplierService.getAllSuppliers();
+        List<Supplier> suppliers = supplierServiceImpl.getAllSuppliers();
         List<SupplierResponseDto> response = suppliers.stream()
                 .map(supplierMapper::toDto)
                 .toList();
@@ -52,7 +52,7 @@ public class SupplierController {
 
     @DeleteMapping("/{cnpj}")
     public ResponseEntity<String> deleteSupplier(@PathVariable String cnpj) {
-        supplierService.deleteSupplierByCnpj(cnpj);
+        supplierServiceImpl.deleteSupplierByCnpj(cnpj);
         return ResponseEntity.ok("Fornecedor deletado com sucesso");
     }
 

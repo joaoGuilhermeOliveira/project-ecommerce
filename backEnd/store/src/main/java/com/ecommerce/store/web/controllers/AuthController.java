@@ -3,7 +3,7 @@ package com.ecommerce.store.web.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.ecommerce.store.services.AuthService;
+import com.ecommerce.store.services.AuthServiceImpl;
 import com.ecommerce.store.web.dtos.requests.LoginRequestDto;
 
 @RestController
@@ -11,11 +11,11 @@ import com.ecommerce.store.web.dtos.requests.LoginRequestDto;
 public class AuthController {
 
     @Autowired
-    private AuthService authService;
+    private AuthServiceImpl authServiceImpl;
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequestDto) {
-        boolean authenticated = authService.authenticate(loginRequestDto.getEmail(), loginRequestDto.getPassword());
+        boolean authenticated = authServiceImpl.authenticate(loginRequestDto.getEmail(), loginRequestDto.getPassword());
         if (authenticated) {
             return ResponseEntity.ok("Login realizado com sucesso!");
         } else {
