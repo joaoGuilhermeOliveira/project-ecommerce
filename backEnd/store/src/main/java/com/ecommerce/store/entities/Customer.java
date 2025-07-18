@@ -1,5 +1,7 @@
 package com.ecommerce.store.entities;
 
+import com.ecommerce.store.enums.StatusEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -43,4 +45,7 @@ public class Customer {
 
     @Column(name = "password", nullable = false, length = 255)
     private String password;
+    
+    @Column(name = "status", nullable = false)
+    private StatusEnum status;
 }

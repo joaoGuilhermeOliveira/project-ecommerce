@@ -10,40 +10,36 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ecommerce.store.entities.Customer;
 import com.ecommerce.store.services.CustomerService;
-import com.ecommerce.store.services.mapper.CustomerMapper;
-import com.ecommerce.store.web.dtos.requests.CustomerDto;
+import com.ecommerce.store.web.dtos.requests.CustomerRequestDto;
+import com.ecommerce.store.web.dtos.responses.CustomerResponseDto;
 
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
 
     private final CustomerService customerService;
-    private final CustomerMapper customerMapper;
 
     @Autowired
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
-        this.customerMapper = new CustomerMapper();
     }
 
     @PostMapping
-    public ResponseEntity<String> createCustomer(@RequestBody CustomerDto customer) {
-        customerService.createCustomer(customerMapper.toEntity(customer));
+    public ResponseEntity<String> createCustomer(@RequestBody CustomerRequestDto customer) {
+        customerService.createCustomer(customer);
         return ResponseEntity.status(201).body("Customer created successfully!");
     }
 
     @GetMapping
-    public ResponseEntity<CustomerDto> getCustomerByCpf(@RequestParam String cpf) {
-        CustomerDto response = customerMapper.toDto(customerService.getCustomerByCpf(cpf));
+    public ResponseEntity<CustomerResponseDto> getCustomerByCpf(@RequestParam String cpf) {
+        CustomerResponseDto response = customerService.getCustomerByCpf(cpf);
         return ResponseEntity.ok().body(response);
     }
 
     @PatchMapping
-    public ResponseEntity<String> updateCustomerByCpf(@RequestParam String cpf, @RequestBody CustomerDto updateCustomer) {
-        Customer customer = customerMapper.toEntity(updateCustomer);
-        customerService.updateCustomerByCpf(cpf, customer);
+    public ResponseEntity<String> updateCustomerByCpf(@RequestParam String cpf, @RequestBody CustomerRequestDto updateCustomer) {
+        customerService.updateCustomerByCpf(cpf, updateCustomer);
         
         return ResponseEntity.status(200).body("Customer updated successfully!");
     }
