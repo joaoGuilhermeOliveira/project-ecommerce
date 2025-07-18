@@ -1,17 +1,18 @@
-package com.ecommerce.store.web.dtos.request;
+package com.ecommerce.store.services.dtos.requests;
 
 import java.sql.Blob;
 
 import lombok.Data;
 
 @Data
-public class ProductDto {
+public class ProductRequestDto {
     private String name;
     private String costPrice;
     private String sellPrice;
     private String description;
-    private CategoryDto category;
-    private SupplierCreateDto supplier;
+    private Long categoryId;
+    private Long supplierId;
     private Blob image;
     private String gtin;
+    private Long brandId;
 }

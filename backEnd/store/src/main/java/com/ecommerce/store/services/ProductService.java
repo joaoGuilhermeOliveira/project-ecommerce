@@ -4,19 +4,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.store.entities.Product;
+import com.ecommerce.store.enums.ProductStatusEnum;
 import com.ecommerce.store.repositories.ProductRepository;
+import com.ecommerce.store.services.dtos.requests.ProductRequestDto;
+import com.ecommerce.store.services.dtos.responses.ProductResponseDto;
+import com.ecommerce.store.services.mapper.ProductMapper;
 
 @Service
 public class ProductService {
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
-    public void createProduct(Product product) {
+    @Autowired
+    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
+        this.productRepository = productRepository;
+        this.productMapper = productMapper;
+    }
+
+    public void createProduct(ProductRequestDto productRequestDto) {
+        Product product = productMapper.toEntity(productRequestDto);
+        product.setStatus(ProductStatusEnum.ACTIVE);
         productRepository.save(product);
     }
 
-    public Product getProductById(Long id) {
-        return productRepository.findById(id).orElse(null);
+    public ProductResponseDto getProductById(Long id) {
+        ProductResponseDto response = productMapper.toDto(productRepository.findById(id).orElse(null));
+        return response;
     }
 }

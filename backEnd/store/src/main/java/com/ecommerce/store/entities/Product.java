@@ -2,6 +2,8 @@ package com.ecommerce.store.entities;
 
 import java.sql.Blob;
 
+import com.ecommerce.store.enums.ProductStatusEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name= "product_id", nullable = false)
+    @Column(name = "product_id", nullable = false)
     private String id;
 
     @Column(name = "name", nullable = false, length = 50)
@@ -37,6 +39,12 @@ public class Product {
     @Column(name = "description", nullable = true, length = 500)
     private String description;
 
+    @Column(name = "image", nullable = true)
+    private Blob image;
+
+    @Column(name = "gtin", nullable = false, length = 14)
+    private String gtin;
+
     @JoinColumn(name = "category_category_id", nullable = false)
     @ManyToOne
     private Category category;
@@ -45,9 +53,10 @@ public class Product {
     @ManyToOne
     private Supplier supplier;
 
-    @Column(name = "image", nullable = true)
-    private Blob image;
+    @JoinColumn(name = "brand_brand_id", nullable = false)
+    @ManyToOne
+    private Brand brand;
 
-    @Column(name = "gtin", nullable = false, length = 14)
-    private String gtin;
+    @Column(name = "status", nullable = false)
+    private ProductStatusEnum status;
 }

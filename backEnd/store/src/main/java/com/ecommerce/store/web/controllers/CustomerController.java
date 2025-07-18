@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.store.entities.Customer;
 import com.ecommerce.store.services.CustomerService;
+import com.ecommerce.store.services.dtos.requests.CustomerDto;
 import com.ecommerce.store.services.mapper.CustomerMapper;
-import com.ecommerce.store.web.dtos.request.CustomerDto;
 
 @RestController
 @RequestMapping("/customers")

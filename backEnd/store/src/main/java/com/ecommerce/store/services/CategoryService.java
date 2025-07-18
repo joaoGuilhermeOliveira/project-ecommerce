@@ -5,18 +5,29 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerce.store.entities.Category;
 import com.ecommerce.store.repositories.CategoryRepository;
+import com.ecommerce.store.services.dtos.requests.CategoryRequestDto;
+import com.ecommerce.store.services.dtos.responses.CategoryResponseDto;
+import com.ecommerce.store.services.mapper.CategoryMapper;
 
 @Service
 public class CategoryService {
+
+    private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
     
     @Autowired
-    private CategoryRepository categoryRepository;
+    public CategoryService(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
+        this.categoryRepository = categoryRepository;
+        this.categoryMapper = categoryMapper;
+    }
 
-    public void createCategory(Category category) {
+    public void createCategory(CategoryRequestDto categoryRequestDto) {
+        Category category = categoryMapper.toEntity(categoryRequestDto);
         categoryRepository.save(category);
     }
 
-    public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id).orElse(null);
+    public CategoryResponseDto getCategoryById(Long id) {
+        CategoryResponseDto response = categoryMapper.toDto(categoryRepository.findById(id).orElse(null));
+        return response;
     }
 }

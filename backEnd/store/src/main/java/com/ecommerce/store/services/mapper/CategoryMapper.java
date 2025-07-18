@@ -3,22 +3,21 @@ package com.ecommerce.store.services.mapper;
 import org.springframework.stereotype.Component;
 
 import com.ecommerce.store.entities.Category;
-import com.ecommerce.store.web.dtos.request.CategoryDto;
+import com.ecommerce.store.services.dtos.requests.CategoryRequestDto;
+import com.ecommerce.store.services.dtos.responses.CategoryResponseDto;
 
 @Component
 public class CategoryMapper {
     
-    public Category toEntity(CategoryDto categoryDto) {
+    public Category toEntity(CategoryRequestDto categoryDto) {
         Category category = new Category();
         category.setName(categoryDto.getName());
-        category.setId(categoryDto.getId());
 
         return category;
     }
 
-    public CategoryDto toDto(Category category) {
-        CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setId(category.getId());
+    public CategoryResponseDto toDto(Category category) {
+        CategoryResponseDto categoryDto = new CategoryResponseDto();
         categoryDto.setName(category.getName());
         
         return categoryDto;

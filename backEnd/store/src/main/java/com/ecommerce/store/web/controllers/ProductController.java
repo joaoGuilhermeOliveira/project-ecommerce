@@ -10,31 +10,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.store.services.ProductService;
+import com.ecommerce.store.services.dtos.requests.ProductRequestDto;
+import com.ecommerce.store.services.dtos.responses.ProductResponseDto;
 import com.ecommerce.store.services.mapper.ProductMapper;
-import com.ecommerce.store.web.dtos.request.ProductDto;
 
 @RestController
 @RequestMapping("/products")
 public class ProductController {
     
     private final ProductService productService;
-    private final ProductMapper productMapper;
 
     @Autowired
-    public ProductController(ProductService productService, ProductMapper productMapper) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.productMapper = productMapper;
     }
 
     @PostMapping
-    public ResponseEntity<String> createProduct(@RequestBody ProductDto productDto) {
-        productService.createProduct(productMapper.toEntity(productDto));
+    public ResponseEntity<String> createProduct(@RequestBody ProductRequestDto productRequestDto) {
+        productService.createProduct(productRequestDto);
         return ResponseEntity.status(201).body("Product created successfully");
     }
 
     @GetMapping
-    public ResponseEntity<ProductDto> getProductById(@RequestParam long id) {
-        ProductDto response = productMapper.toDto(productService.getProductById(id));
+    public ResponseEntity<ProductResponseDto> getProductById(@RequestParam long id) {
+        ProductResponseDto response = productService.getProductById(id);
         return ResponseEntity.ok(response);
     }
 }

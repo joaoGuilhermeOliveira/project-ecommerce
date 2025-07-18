@@ -3,14 +3,17 @@ package com.ecommerce.store.services.mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ecommerce.store.entities.Brand;
 import com.ecommerce.store.entities.Category;
 import com.ecommerce.store.entities.Product;
+import com.ecommerce.store.repositories.BrandRepository;
 import com.ecommerce.store.repositories.CategoryRepository;
 import com.ecommerce.store.repositories.SupplierRepository;
+import com.ecommerce.store.services.dtos.requests.ProductRequestDto;
+import com.ecommerce.store.services.dtos.responses.CategoryResponseDto;
+import com.ecommerce.store.services.dtos.responses.ProductResponseDto;
+import com.ecommerce.store.services.dtos.responses.SupplierResponseDto;
 import com.ecommerce.store.entities.Supplier;
-import com.ecommerce.store.web.dtos.request.CategoryDto;
-import com.ecommerce.store.web.dtos.request.ProductDto;
-import com.ecommerce.store.web.dtos.request.SupplierCreateDto;
 
 @Component
 public class ProductMapper {
@@ -18,25 +21,29 @@ public class ProductMapper {
     private CategoryRepository categoryRepository;
     @Autowired
     private SupplierRepository supplierRepository;
+    @Autowired
+    private BrandRepository brandRepository;
 
-    public Product toEntity(ProductDto productRequestDto) {
+    public Product toEntity(ProductRequestDto productRequestDto) {
         Product product = new Product();
         product.setName(productRequestDto.getName());
         product.setDescription(productRequestDto.getDescription());
         product.setCostPrice(productRequestDto.getCostPrice());
         product.setSellPrice(productRequestDto.getSellPrice());
-        Category category = categoryRepository.findById(productRequestDto.getCategory().getId()).orElseThrow();
+        Category category = categoryRepository.findById(productRequestDto.getCategoryId()).orElseThrow();
         product.setCategory(category);
-        Supplier supplier = supplierRepository.findById(productRequestDto.getSupplier().getId()).orElseThrow();
+        Supplier supplier = supplierRepository.findById(productRequestDto.getSupplierId()).orElseThrow();
         product.setSupplier(supplier);
         product.setImage(productRequestDto.getImage());
         product.setGtin(productRequestDto.getGtin());
+        Brand brand = brandRepository.findById(productRequestDto.getBrandId()).orElseThrow();
+        product.setBrand(brand);
 
         return product;
     }
 
-    public ProductDto toDto(Product product) {
-        ProductDto productDto = new ProductDto();
+    public ProductResponseDto toDto(Product product) {
+        ProductResponseDto productDto = new ProductResponseDto();
         productDto.setName(product.getName());
         productDto.setDescription(product.getDescription());
         productDto.setCostPrice(product.getCostPrice());
@@ -45,24 +52,25 @@ public class ProductMapper {
         productDto.setSupplier(this.buildSupplierDto(product.getSupplier()));
         productDto.setImage(product.getImage());
         productDto.setGtin(product.getGtin());
+        productDto.setStatus(product.getStatus());
 
         return productDto;
     }
 
-    private CategoryDto buildCategoryDto(Category category) {
-        CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setId(category.getId());
+    private CategoryResponseDto buildCategoryDto(Category category) {
+        CategoryResponseDto categoryDto = new CategoryResponseDto();
         categoryDto.setName(category.getName());
         return categoryDto;
     }
 
-    private SupplierCreateDto buildSupplierDto(Supplier supplier) {
-        SupplierCreateDto supplierDto = new SupplierCreateDto();
-        supplierDto.setId(supplier.getSupplierId());
+    private SupplierResponseDto buildSupplierDto(Supplier supplier) {
+        SupplierResponseDto supplierDto = new SupplierResponseDto();
         supplierDto.setCnpj(supplier.getCnpj());
         supplierDto.setName(supplier.getName());
         supplierDto.setPhone_number(supplier.getPhone_number());
         supplierDto.setEmail(supplier.getEmail());
         return supplierDto;
     }
+
+    
 }

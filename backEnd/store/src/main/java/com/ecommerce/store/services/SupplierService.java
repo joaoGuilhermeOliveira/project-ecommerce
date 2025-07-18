@@ -1,9 +1,11 @@
 package com.ecommerce.store.services;
 
 import com.ecommerce.store.entities.Supplier;
+import com.ecommerce.store.enums.StatusEnum;
 import com.ecommerce.store.repositories.SupplierRepository;
+import com.ecommerce.store.services.dtos.requests.SupplierRequestDto;
 import com.ecommerce.store.services.mapper.SupplierMapper;
-import com.ecommerce.store.web.dtos.request.SupplierCreateDto;
+
 import jakarta.persistence.Transient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,10 @@ public class SupplierService {
     SupplierRepository supplierRepository;
 
     @Transient
-    public Supplier createSupplier(SupplierCreateDto supplierCreateDto) {
+    public Supplier createSupplier(SupplierRequestDto supplierCreateDto) {
         SupplierMapper mapper = new SupplierMapper();
         Supplier supplier = mapper.toEntity(supplierCreateDto);
+        supplier.setStatus(StatusEnum.ACTIVE);
         return supplierRepository.save(supplier);
     }
 
@@ -28,5 +31,4 @@ public class SupplierService {
         supplierRepository.delete(supplier);
     }
 
-    
 }

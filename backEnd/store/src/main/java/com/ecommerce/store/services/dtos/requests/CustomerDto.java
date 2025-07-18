@@ -1,4 +1,4 @@
-package com.ecommerce.store.web.dtos.request;
+package com.ecommerce.store.services.dtos.requests;
 
 import com.ecommerce.store.entities.Address;
 
