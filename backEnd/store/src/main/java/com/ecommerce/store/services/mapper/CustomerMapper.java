@@ -3,7 +3,7 @@ package com.ecommerce.store.services.mapper;
 import org.springframework.stereotype.Component;
 
 import com.ecommerce.store.entities.Customer;
-import com.ecommerce.store.services.dtos.requests.CustomerDto;
+import com.ecommerce.store.web.dtos.requests.CustomerDto;
 
 @Component
 public class CustomerMapper {

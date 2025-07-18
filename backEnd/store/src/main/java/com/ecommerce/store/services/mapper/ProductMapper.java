@@ -9,10 +9,10 @@ import com.ecommerce.store.entities.Product;
 import com.ecommerce.store.repositories.BrandRepository;
 import com.ecommerce.store.repositories.CategoryRepository;
 import com.ecommerce.store.repositories.SupplierRepository;
-import com.ecommerce.store.services.dtos.requests.ProductRequestDto;
-import com.ecommerce.store.services.dtos.responses.CategoryResponseDto;
-import com.ecommerce.store.services.dtos.responses.ProductResponseDto;
-import com.ecommerce.store.services.dtos.responses.SupplierResponseDto;
+import com.ecommerce.store.web.dtos.requests.ProductRequestDto;
+import com.ecommerce.store.web.dtos.responses.CategoryResponseDto;
+import com.ecommerce.store.web.dtos.responses.ProductResponseDto;
+import com.ecommerce.store.web.dtos.responses.SupplierResponseDto;
 import com.ecommerce.store.entities.Supplier;
 
 @Component

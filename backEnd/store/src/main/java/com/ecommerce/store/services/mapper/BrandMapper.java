@@ -3,8 +3,8 @@ package com.ecommerce.store.services.mapper;
 import org.springframework.stereotype.Component;
 
 import com.ecommerce.store.entities.Brand;
-import com.ecommerce.store.services.dtos.requests.BrandRequestDto;
-import com.ecommerce.store.services.dtos.responses.BrandResponseDto;
+import com.ecommerce.store.web.dtos.requests.BrandRequestDto;
+import com.ecommerce.store.web.dtos.responses.BrandResponseDto;
 
 @Component
 public class BrandMapper {

@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerce.store.entities.Category;
 import com.ecommerce.store.repositories.CategoryRepository;
-import com.ecommerce.store.services.dtos.requests.CategoryRequestDto;
-import com.ecommerce.store.services.dtos.responses.CategoryResponseDto;
 import com.ecommerce.store.services.mapper.CategoryMapper;
+import com.ecommerce.store.web.dtos.requests.CategoryRequestDto;
+import com.ecommerce.store.web.dtos.responses.CategoryResponseDto;
 
 @Service
 public class CategoryService {

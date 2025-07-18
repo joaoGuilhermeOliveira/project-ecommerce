@@ -3,8 +3,8 @@ package com.ecommerce.store.services.mapper;
 import org.springframework.stereotype.Component;
 
 import com.ecommerce.store.entities.Supplier;
-import com.ecommerce.store.services.dtos.requests.SupplierRequestDto;
-import com.ecommerce.store.services.dtos.responses.SupplierResponseDto;
+import com.ecommerce.store.web.dtos.requests.SupplierRequestDto;
+import com.ecommerce.store.web.dtos.responses.SupplierResponseDto;
 
 @Component
 public class SupplierMapper {

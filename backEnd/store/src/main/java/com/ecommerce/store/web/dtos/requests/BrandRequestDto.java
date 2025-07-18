@@ -1,4 +1,4 @@
-package com.ecommerce.store.services.dtos.requests;
+package com.ecommerce.store.web.dtos.requests;
 
 import lombok.Data;
 

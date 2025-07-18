@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.store.services.CategoryService;
-import com.ecommerce.store.services.dtos.requests.CategoryRequestDto;
-import com.ecommerce.store.services.dtos.responses.CategoryResponseDto;
+import com.ecommerce.store.web.dtos.requests.CategoryRequestDto;
+import com.ecommerce.store.web.dtos.responses.CategoryResponseDto;
 
 @RestController
 @RequestMapping("/categories")

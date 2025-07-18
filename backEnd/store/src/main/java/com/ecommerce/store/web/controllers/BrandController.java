@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.store.services.BrandService;
-import com.ecommerce.store.services.dtos.requests.BrandRequestDto;
-import com.ecommerce.store.services.dtos.responses.BrandResponseDto;
+import com.ecommerce.store.web.dtos.requests.BrandRequestDto;
+import com.ecommerce.store.web.dtos.responses.BrandResponseDto;
 
 @RestController
 @RequestMapping("/brands")

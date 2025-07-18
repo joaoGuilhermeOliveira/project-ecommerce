@@ -2,9 +2,9 @@ package com.ecommerce.store.web.controllers;
 
 import com.ecommerce.store.entities.Supplier;
 import com.ecommerce.store.services.SupplierService;
-import com.ecommerce.store.services.dtos.requests.SupplierRequestDto;
-import com.ecommerce.store.services.dtos.responses.SupplierResponseDto;
 import com.ecommerce.store.services.mapper.SupplierMapper;
+import com.ecommerce.store.web.dtos.requests.SupplierRequestDto;
+import com.ecommerce.store.web.dtos.responses.SupplierResponseDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

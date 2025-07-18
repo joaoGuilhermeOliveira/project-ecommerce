@@ -3,8 +3,8 @@ package com.ecommerce.store.services.mapper;
 import org.springframework.stereotype.Component;
 
 import com.ecommerce.store.entities.Category;
-import com.ecommerce.store.services.dtos.requests.CategoryRequestDto;
-import com.ecommerce.store.services.dtos.responses.CategoryResponseDto;
+import com.ecommerce.store.web.dtos.requests.CategoryRequestDto;
+import com.ecommerce.store.web.dtos.responses.CategoryResponseDto;
 
 @Component
 public class CategoryMapper {

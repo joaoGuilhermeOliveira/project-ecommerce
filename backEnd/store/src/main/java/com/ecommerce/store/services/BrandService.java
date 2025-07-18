@@ -4,9 +4,9 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerce.store.entities.Brand;
 import com.ecommerce.store.repositories.BrandRepository;
-import com.ecommerce.store.services.dtos.requests.BrandRequestDto;
-import com.ecommerce.store.services.dtos.responses.BrandResponseDto;
 import com.ecommerce.store.services.mapper.BrandMapper;
+import com.ecommerce.store.web.dtos.requests.BrandRequestDto;
+import com.ecommerce.store.web.dtos.responses.BrandResponseDto;
 
 @Service
 public class BrandService {

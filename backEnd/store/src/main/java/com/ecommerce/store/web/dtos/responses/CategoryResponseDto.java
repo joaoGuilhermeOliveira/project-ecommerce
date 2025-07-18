@@ -1,4 +1,4 @@
-package com.ecommerce.store.services.dtos.responses;
+package com.ecommerce.store.web.dtos.responses;
 
 import lombok.Data;
 

@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import com.ecommerce.store.entities.Product;
 import com.ecommerce.store.enums.ProductStatusEnum;
 import com.ecommerce.store.repositories.ProductRepository;
-import com.ecommerce.store.services.dtos.requests.ProductRequestDto;
-import com.ecommerce.store.services.dtos.responses.ProductResponseDto;
 import com.ecommerce.store.services.mapper.ProductMapper;
+import com.ecommerce.store.web.dtos.requests.ProductRequestDto;
+import com.ecommerce.store.web.dtos.responses.ProductResponseDto;
 
 @Service
 public class ProductService {

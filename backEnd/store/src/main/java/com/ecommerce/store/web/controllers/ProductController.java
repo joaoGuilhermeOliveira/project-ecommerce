@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.store.services.ProductService;
-import com.ecommerce.store.services.dtos.requests.ProductRequestDto;
-import com.ecommerce.store.services.dtos.responses.ProductResponseDto;
 import com.ecommerce.store.services.mapper.ProductMapper;
+import com.ecommerce.store.web.dtos.requests.ProductRequestDto;
+import com.ecommerce.store.web.dtos.responses.ProductResponseDto;
 
 @RestController
 @RequestMapping("/products")
