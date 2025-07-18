@@ -1,11 +1,10 @@
 package com.ecommerce.store.services.mapper;
 
-
+import org.springframework.stereotype.Component;
 
 import com.ecommerce.store.entities.Supplier;
 import com.ecommerce.store.web.dtos.requests.SupplierRequestDto;
 import com.ecommerce.store.web.dtos.responses.SupplierResponseDto;
-import org.springframework.stereotype.Component;
 
 @Component
 public class SupplierMapper {
@@ -24,7 +23,10 @@ public class SupplierMapper {
         SupplierResponseDto dto = new SupplierResponseDto();
         dto.setCnpj(entity.getCnpj());
         dto.setName(entity.getName());
+        dto.setPhone_number(entity.getPhone_number());
         dto.setEmail(entity.getEmail());
+        dto.setAddress(entity.getAddress());
+        dto.setStatus(entity.getStatus());
         return dto;
     }
 }

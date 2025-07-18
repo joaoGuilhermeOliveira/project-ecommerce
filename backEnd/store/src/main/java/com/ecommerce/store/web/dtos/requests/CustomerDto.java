@@ -5,8 +5,8 @@ import com.ecommerce.store.entities.Address;
 import lombok.Data;
 
 @Data
-public class CustomerRequestDto {
-    private Long id;
+public class CustomerDto {
+    private Long customerId;
     private String name;
     private String cpf;
     private String email;

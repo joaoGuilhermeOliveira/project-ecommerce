@@ -1,9 +1,11 @@
 package com.ecommerce.store.repositories;
 
-import com.ecommerce.store.entities.Sale;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.ecommerce.store.entities.Product;
+
 @Repository
-public interface SaleRepository extends JpaRepository<Sale, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    
 }
