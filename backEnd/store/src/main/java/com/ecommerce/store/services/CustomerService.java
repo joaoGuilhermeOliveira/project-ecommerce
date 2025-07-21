@@ -4,29 +4,45 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ecommerce.store.entities.Address;
 import com.ecommerce.store.entities.Customer;
+import com.ecommerce.store.enums.StatusEnum;
 import com.ecommerce.store.repositories.CustomerRepository;
+import com.ecommerce.store.services.mapper.CustomerMapper;
+import com.ecommerce.store.web.dtos.responses.CustomerResponseDto;
+import com.ecommerce.store.web.dtos.requests.CustomerRequestDto;
+
 import org.springframework.stereotype.Service;
 
 @Service
 public class CustomerService {
 
+    private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
+
     @Autowired
-    private CustomerRepository customerRepository;
-
-    public Customer createCustomer(Customer customer) {
-        return customerRepository.save(customer);
+    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper) {
+        this.customerRepository = customerRepository;
+        this.customerMapper = customerMapper;
     }
 
-    public Customer getCustomerByCpf(String cpf) {
-        return customerRepository.findByCpf(cpf);
+    public void createCustomer(CustomerRequestDto customerRequestDto) {
+        Customer customer = customerMapper.toEntity(customerRequestDto);
+        customer.setStatus(StatusEnum.ACTIVE);
+        customerRepository.save(customer);
     }
 
-    public void updateCustomerByCpf(String cpf, Customer updateCustomer) {
+    public CustomerResponseDto getCustomerByCpf(String cpf) {
+        Customer customer = customerRepository.findByCpf(cpf);
+        CustomerResponseDto response = customerMapper.toDto(customer);
+        return response;
+    }
+
+    public void updateCustomerByCpf(String cpf, CustomerRequestDto updateCustomer) {
         this.updateCustomer(cpf, updateCustomer);
     }
 
-    private void updateCustomer(String cpf, Customer updateCustomer) {
-        Customer customer = getCustomerByCpf(cpf);
+    private void updateCustomer(String cpf, CustomerRequestDto updateCustomer) {
+
+        Customer customer = customerRepository.findByCpf(cpf);
 
         customer.setName(updateCustomer.getName() != null ? updateCustomer.getName() : customer.getName());
 

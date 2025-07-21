@@ -3,12 +3,13 @@ package com.ecommerce.store.services.mapper;
 import org.springframework.stereotype.Component;
 
 import com.ecommerce.store.entities.Customer;
-import com.ecommerce.store.web.dtos.requests.CustomerDto;
+import com.ecommerce.store.web.dtos.requests.CustomerRequestDto;
+import com.ecommerce.store.web.dtos.responses.CustomerResponseDto;
 
 @Component
 public class CustomerMapper {
     
-    public Customer toEntity(CustomerDto customerRequestDto) {
+    public Customer toEntity(CustomerRequestDto customerRequestDto) {
         Customer customer = new Customer();
         customer.setName(customerRequestDto.getName());
         customer.setCpf(customerRequestDto.getCpf());
@@ -21,9 +22,8 @@ public class CustomerMapper {
         return customer;
     }
 
-    public CustomerDto toDto (Customer customer) {
-        CustomerDto customerRequestDto = new CustomerDto();
-        customerRequestDto.setCustomerId(customer.getId());
+    public CustomerResponseDto toDto (Customer customer) {
+        CustomerResponseDto customerRequestDto = new CustomerResponseDto();
         customerRequestDto.setName(customer.getName());
         customerRequestDto.setCpf(customer.getCpf());
         customerRequestDto.setEmail(customer.getEmail());

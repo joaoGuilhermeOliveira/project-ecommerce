@@ -44,7 +44,7 @@ public class SupplierController {
         if (supplier == null) {
             return ResponseEntity.notFound().build();
         }
-            supplierService.deleteSupplier(supplier);
+            supplierService.deleteSupplierByCnpj(cnpj);
         return ResponseEntity.ok("Supplier deleted successfully");
     }
 
