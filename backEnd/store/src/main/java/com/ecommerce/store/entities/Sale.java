@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+import com.ecommerce.store.enums.PaymentMethodEnum;
+
 @Entity
 @Table(name = "Sale")
 @Data
@@ -30,6 +32,9 @@ public class Sale {
 
     @Column(name= "total_price")
     private String totalPice;
+
+    @Column(name = "payment_method")
+    private PaymentMethodEnum paymentMethod;
 
     @ManyToOne
     @JoinColumn(name = "customer_customer_id")

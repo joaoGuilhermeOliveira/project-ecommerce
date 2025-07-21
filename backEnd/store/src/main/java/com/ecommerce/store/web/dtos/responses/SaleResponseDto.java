@@ -1,5 +1,6 @@
 package com.ecommerce.store.web.dtos.responses;
 
+import com.ecommerce.store.enums.PaymentMethodEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -12,11 +13,13 @@ public class SaleResponseDto {
     private Long id;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date SaleData;
+    private Date saleData;
 
     private String saleValue;
 
     private String freightPrice;
+
+    private PaymentMethodEnum paymentMethod;
 
     private String totalPrice;
 

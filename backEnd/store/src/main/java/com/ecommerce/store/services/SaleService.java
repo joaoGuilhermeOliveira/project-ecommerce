@@ -27,6 +27,7 @@ public class SaleService {
         Customer customer = customerRepository.findById(saleRequestDto.getCustomerId())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
         Sale sale = saleMapper.toEntity(saleRequestDto);
+        sale.setSaleData(new java.util.Date());
         sale.setCustomer(customer);
         return saleRepository.save(sale);
     }

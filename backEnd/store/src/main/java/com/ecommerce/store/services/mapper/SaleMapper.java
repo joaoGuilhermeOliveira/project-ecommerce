@@ -12,9 +12,9 @@ public class SaleMapper {
 
     public Sale toEntity(SaleRequestDto dto) {
         Sale sale = new Sale();
-        sale.setSaleData(dto.getSaleData());
         sale.setFreightPrice(dto.getFreightPrice());
         sale.setTotalPice(dto.getTotalPrice());
+        sale.setPaymentMethod(dto.getPaymentMethod());
         sale.setSaleValue(dto.getSaleValue());
 
         if (dto.getCustomerId() != null) {
@@ -32,6 +32,7 @@ public class SaleMapper {
         dto.setFreightPrice(entity.getFreightPrice());
         dto.setTotalPrice(entity.getTotalPice());
         dto.setSaleValue(entity.getSaleValue());
+        dto.setPaymentMethod(entity.getPaymentMethod());
         dto.setId(entity.getId());
         return dto;
     }

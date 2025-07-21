@@ -1,5 +1,6 @@
 package com.ecommerce.store.web.dtos.requests;
 
+import com.ecommerce.store.enums.PaymentMethodEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -17,6 +18,8 @@ public class SaleRequestDto {
     private String freightPrice;
 
     private String totalPrice;
+
+    private PaymentMethodEnum paymentMethod;
 
     private Long customerId;
 
