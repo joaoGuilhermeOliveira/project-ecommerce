@@ -1,5 +1,7 @@
 package com.ecommerce.store.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ecommerce.store.entities.Address;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
+
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
 
@@ -25,19 +29,44 @@ public class CustomerService {
     }
 
     public void createCustomer(CustomerRequestDto customerRequestDto) {
-        Customer customer = customerMapper.toEntity(customerRequestDto);
-        customer.setStatus(StatusEnum.ACTIVE);
-        customerRepository.save(customer);
+        logger.info("Creating customer with CPF: {}", customerRequestDto.getCpf());
+        try {
+            Customer customer = customerMapper.toEntity(customerRequestDto);
+            customer.setStatus(StatusEnum.ACTIVE);
+            customerRepository.save(customer);
+            logger.info("Customer created successfully: {}", customer.getCpf());
+        } catch (Exception e) {
+            logger.error("Error creating customer with CPF: {}", customerRequestDto.getCpf(), e);
+            throw e;
+        }
     }
 
     public CustomerResponseDto getCustomerByCpf(String cpf) {
-        Customer customer = customerRepository.findByCpf(cpf);
-        CustomerResponseDto response = customerMapper.toDto(customer);
-        return response;
+        logger.info("Fetching customer by CPF: {}", cpf);
+        try {
+            Customer customer = customerRepository.findByCpf(cpf);
+            if (customer == null) {
+                logger.error("Customer not found for CPF: {}", cpf);
+                throw new RuntimeException("Cliente não encontrado para o CPF: " + cpf);
+            }
+            CustomerResponseDto response = customerMapper.toDto(customer);
+            logger.info("Customer found for CPF: {}", cpf);
+            return response;
+        } catch (Exception e) {
+            logger.error("Error fetching customer by CPF: {}", cpf, e);
+            throw e;
+        }
     }
 
     public void updateCustomerByCpf(String cpf, CustomerRequestDto updateCustomer) {
-        this.updateCustomer(cpf, updateCustomer);
+        logger.info("Updating customer with CPF: {}", cpf);
+        try {
+            this.updateCustomer(cpf, updateCustomer);
+            logger.info("Customer updated successfully: {}", cpf);
+        } catch (Exception e) {
+            logger.error("Error updating customer with CPF: {}", cpf, e);
+            throw e;
+        }
     }
 
     private void updateCustomer(String cpf, CustomerRequestDto updateCustomer) {
