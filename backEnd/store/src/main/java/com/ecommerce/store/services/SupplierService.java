@@ -1,46 +1,13 @@
 package com.ecommerce.store.services;
 
 import com.ecommerce.store.entities.Supplier;
-import com.ecommerce.store.enums.StatusEnum;
-import com.ecommerce.store.exceptions.supplier.InvalidSupplierException;
-import com.ecommerce.store.exceptions.supplier.SupplierNotFoundException;
-import com.ecommerce.store.repositories.SupplierRepository;
-import com.ecommerce.store.services.mapper.SupplierMapper;
 import com.ecommerce.store.web.dtos.requests.SupplierRequestDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class SupplierService {
-    @Autowired
-    SupplierRepository supplierRepository;
-
-    public Supplier createSupplier(SupplierRequestDto supplierRequestDto) {
-        try {
-            SupplierMapper mapper = new SupplierMapper();
-            Supplier supplier = mapper.toEntity(supplierRequestDto);
-            supplier.setStatus(StatusEnum.ACTIVE);
-            return supplierRepository.save(supplier);
-        } catch (DataIntegrityViolationException e) {
-            throw new InvalidSupplierException("Erro ao criar fornecedor: " + e.getMessage());
-        }
-    }
-
-    public Supplier getSupplierByCnpj(String cnpj) {
-        return supplierRepository.findByCnpj(cnpj).orElseThrow(() -> new SupplierNotFoundException("Fornecedor não encontrado com CNPJ: " + cnpj));
-    }
-
-    public List<Supplier> getAllSuppliers() {
-        return supplierRepository.findAll();
-    }
-
-    public void deleteSupplierByCnpj(String cnpj) {
-        Supplier supplier = supplierRepository.findByCnpj(cnpj)
-                .orElseThrow(() -> new SupplierNotFoundException("Fornecedor não encontrado com CNPJ: " + cnpj));
-
-        supplierRepository.delete(supplier);
-    }
+public interface SupplierService {
+    Supplier createSupplier(SupplierRequestDto supplierRequestDto);
+    Supplier getSupplierByCnpj(String cnpj);
+    List<Supplier> getAllSuppliers();
+    void deleteSupplierByCnpj(String cnpj);
 }

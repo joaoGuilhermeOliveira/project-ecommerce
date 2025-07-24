@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ecommerce.store.services.ProductService;
+import com.ecommerce.store.services.ProductServiceImpl;
 import com.ecommerce.store.web.dtos.requests.ProductRequestDto;
 import com.ecommerce.store.web.dtos.responses.ProductResponseDto;
 
@@ -17,22 +17,22 @@ import com.ecommerce.store.web.dtos.responses.ProductResponseDto;
 @RequestMapping("/products")
 public class ProductController {
     
-    private final ProductService productService;
+    private final ProductServiceImpl productServiceImpl;
 
     @Autowired
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    public ProductController(ProductServiceImpl productServiceImpl) {
+        this.productServiceImpl = productServiceImpl;
     }
 
     @PostMapping
     public ResponseEntity<String> createProduct(@RequestBody ProductRequestDto productRequestDto) {
-        productService.createProduct(productRequestDto);
+        productServiceImpl.createProduct(productRequestDto);
         return ResponseEntity.status(201).body("Product created successfully");
     }
 
     @GetMapping
-    public ResponseEntity<ProductResponseDto> getProductById(@RequestParam long id) {
-        ProductResponseDto response = productService.getProductById(id);
+    public ResponseEntity<ProductResponseDto> getProductById(@RequestParam Long id) {
+        ProductResponseDto response = productServiceImpl.getProductById(id);
         return ResponseEntity.ok(response);
     }
 }
