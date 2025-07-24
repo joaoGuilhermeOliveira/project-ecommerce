@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ecommerce.store.services.CategoryService;
+import com.ecommerce.store.services.CategoryServiceImpl;
 import com.ecommerce.store.web.dtos.requests.CategoryRequestDto;
 import com.ecommerce.store.web.dtos.responses.CategoryResponseDto;
 
@@ -17,22 +17,22 @@ import com.ecommerce.store.web.dtos.responses.CategoryResponseDto;
 @RequestMapping("/categories")
 public class CategoryController {
 
-    private final CategoryService categoryService;
+    private final CategoryServiceImpl categoryServiceImpl;
 
     @Autowired
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
+    public CategoryController(CategoryServiceImpl categoryServiceImpl) {
+        this.categoryServiceImpl = categoryServiceImpl;
     }
 
     @PostMapping
     public ResponseEntity<String> createCategory(@RequestBody CategoryRequestDto categoryDto) {
-        categoryService.createCategory(categoryDto);
+        categoryServiceImpl.createCategory(categoryDto);
         return ResponseEntity.status(201).body("Category created successfully");
     }
 
     @GetMapping
     public ResponseEntity<CategoryResponseDto> getCategoryById(@RequestParam Long id) {
-        CategoryResponseDto response = categoryService.getCategoryById(id);
+        CategoryResponseDto response = categoryServiceImpl.getCategoryById(id);
         return ResponseEntity.ok().body(response);
     }
 
