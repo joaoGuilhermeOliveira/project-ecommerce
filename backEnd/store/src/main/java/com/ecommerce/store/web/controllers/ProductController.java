@@ -31,7 +31,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<ProductResponseDto> getProductById(@RequestParam long id) {
+    public ResponseEntity<ProductResponseDto> getProductById(@RequestParam Long id) {
         ProductResponseDto response = productServiceImpl.getProductById(id);
         return ResponseEntity.ok(response);
     }
