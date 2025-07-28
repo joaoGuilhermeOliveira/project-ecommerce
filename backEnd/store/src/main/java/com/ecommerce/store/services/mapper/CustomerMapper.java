@@ -30,7 +30,7 @@ public class CustomerMapper {
         customerRequestDto.setAddress(customer.getAddress());
         customerRequestDto.setBirthDate(customer.getBirthDate());
         customerRequestDto.setPhone(customer.getPhone());
-
+        customerRequestDto.setStatus(customer.getStatus().name());
         return customerRequestDto;
     }
 }

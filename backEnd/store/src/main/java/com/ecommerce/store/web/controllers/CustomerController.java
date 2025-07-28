@@ -1,14 +1,9 @@
 package com.ecommerce.store.web.controllers;
 
+import com.ecommerce.store.web.dtos.requests.CustomerUpdateStatusRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ecommerce.store.services.CustomerServiceImpl;
 import com.ecommerce.store.web.dtos.requests.CustomerRequestDto;
@@ -40,7 +35,14 @@ public class CustomerController {
     @PatchMapping
     public ResponseEntity<String> updateCustomerByCpf(@RequestParam String cpf, @RequestBody CustomerRequestDto updateCustomer) {
         customerServiceImpl.updateCustomerByCpf(cpf, updateCustomer);
-        
         return ResponseEntity.status(200).body("Customer updated successfully!");
     }
+
+    @PutMapping("/{cpf}/status")
+    public ResponseEntity<Void> updateStatus(@PathVariable String cpf,
+                                             @RequestBody CustomerUpdateStatusRequestDto updateStatus) {
+        customerServiceImpl.updateStatusByCpf(cpf, updateStatus);
+        return ResponseEntity.noContent().build();
+    }
+
 }

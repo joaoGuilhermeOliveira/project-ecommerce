@@ -1,5 +1,6 @@
 package com.ecommerce.store.services;
 
+import com.ecommerce.store.web.dtos.requests.CustomerUpdateStatusRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ecommerce.store.entities.Address;
@@ -38,24 +39,43 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public void updateCustomerByCpf(String cpf, CustomerRequestDto updateCustomer) {
-        this.updateCustomer(cpf, updateCustomer);
+    public void updateCustomerByCpf(String cpf, CustomerRequestDto updateCustomerDto) {
+        Customer customer = customerRepository.findByCpf(cpf);
+        if (customer == null) {
+            throw new IllegalArgumentException("Customer with CPF " + cpf + " not found.");
+        }
+        updateCustomer(customer, updateCustomerDto);
     }
 
-    private void updateCustomer(String cpf, CustomerRequestDto updateCustomer) {
-
+    @Override
+    public void updateStatusByCpf(String cpf, CustomerUpdateStatusRequestDto updateStatus) {
         Customer customer = customerRepository.findByCpf(cpf);
 
+        if (customer == null) {
+            throw new IllegalArgumentException("Customer with CPF " + cpf + " not found.");
+        }
+
+        if (updateStatus.getStatus() == null) {
+            throw new IllegalArgumentException("Status must be provided.");
+        }
+
+        StatusEnum newStatus;
+        try {
+            newStatus = StatusEnum.valueOf(updateStatus.getStatus().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid status: " + updateStatus.getStatus());
+        }
+
+        customer.setStatus(newStatus);
+        customerRepository.save(customer);
+    }
+
+    private void updateCustomer(Customer customer, CustomerRequestDto updateCustomer) {
         customer.setName(updateCustomer.getName() != null ? updateCustomer.getName() : customer.getName());
-
         customer.setEmail(updateCustomer.getEmail() != null ? updateCustomer.getEmail() : customer.getEmail());
-
         customer.setPhone(updateCustomer.getPhone() != null ? updateCustomer.getPhone() : customer.getPhone());
-
         customer.setAddress(this.updateCustomerAddress(customer, updateCustomer.getAddress()));
-
-        customer.setBirthDate(
-                updateCustomer.getBirthDate() != null ? updateCustomer.getBirthDate() : customer.getBirthDate());
+        customer.setBirthDate(updateCustomer.getBirthDate() != null ? updateCustomer.getBirthDate() : customer.getBirthDate());
 
         customerRepository.save(customer);
     }

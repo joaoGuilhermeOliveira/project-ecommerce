@@ -12,4 +12,5 @@ public class CustomerResponseDto {
     private Address address;
     private String birthDate;
     private String phone;
+    private String status;
 }
