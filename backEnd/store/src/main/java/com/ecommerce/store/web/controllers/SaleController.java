@@ -1,7 +1,7 @@
 package com.ecommerce.store.web.controllers;
 
 import com.ecommerce.store.entities.Sale;
-import com.ecommerce.store.services.SaleService;
+import com.ecommerce.store.services.SaleServiceImpl;
 import com.ecommerce.store.services.mapper.SaleMapper;
 import com.ecommerce.store.web.dtos.requests.SaleRequestDto;
 import com.ecommerce.store.web.dtos.responses.SaleResponseDto;
@@ -15,25 +15,25 @@ import java.util.List;
 @RequestMapping("api/sales")
 public class SaleController {
 
-    private final SaleService saleService;
+    private final SaleServiceImpl saleServiceImpl;
     private final SaleMapper saleMapper;
 
     @Autowired
-    public SaleController(SaleService saleService) {
-        this.saleService = saleService;
+    public SaleController(SaleServiceImpl saleServiceImpl) {
+        this.saleServiceImpl = saleServiceImpl;
         this.saleMapper = new SaleMapper();
     }
 
     @PostMapping
     public ResponseEntity<SaleResponseDto> createSale(@RequestBody SaleRequestDto saleRequestDto) {
-        Sale sale = saleService.createSale(saleRequestDto);
+        Sale sale = saleServiceImpl.createSale(saleRequestDto);
         SaleResponseDto response = saleMapper.toDto(sale);
         return ResponseEntity.status(201).body(response);
     }
 
     @GetMapping("/{saleId}")
     public ResponseEntity<SaleResponseDto> getSaleById(@PathVariable Long saleId) {
-        Sale sale = saleService.getSaleById(saleId);
+        Sale sale = saleServiceImpl.getSaleById(saleId);
         if (sale == null) {
             return ResponseEntity.notFound().build();
         }
@@ -43,7 +43,7 @@ public class SaleController {
 
     @GetMapping
     public ResponseEntity<List<SaleResponseDto>> getSales(){
-        List<Sale> sales = saleService.getAllSales();
+        List<Sale> sales = saleServiceImpl.getAllSales();
         List<SaleResponseDto> response = sales.stream()
                 .map(saleMapper::toDto)
                 .toList();

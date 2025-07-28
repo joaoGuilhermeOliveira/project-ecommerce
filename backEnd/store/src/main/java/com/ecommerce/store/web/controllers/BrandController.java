@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ecommerce.store.services.BrandService;
+import com.ecommerce.store.services.BrandServiceImpl;
 import com.ecommerce.store.web.dtos.requests.BrandRequestDto;
 import com.ecommerce.store.web.dtos.responses.BrandResponseDto;
 
@@ -17,22 +17,22 @@ import com.ecommerce.store.web.dtos.responses.BrandResponseDto;
 @RequestMapping("/brands")
 public class BrandController {
     
-    private final BrandService brandService;
+    private final BrandServiceImpl brandServiceImpl;
 
     @Autowired
-    public BrandController(BrandService brandService) {
-        this.brandService = brandService;
+    public BrandController(BrandServiceImpl brandServiceImpl) {
+        this.brandServiceImpl = brandServiceImpl;
     }
 
     @PostMapping
     public ResponseEntity<String> createBrand(@RequestBody BrandRequestDto brandRequestDto) {
-        brandService.createBrand(brandRequestDto);
+        brandServiceImpl.createBrand(brandRequestDto);
         return ResponseEntity.status(201).body("Brand created successfully");
     }
 
     @GetMapping
     public ResponseEntity<BrandResponseDto> getBrandById(@RequestParam Long id) {
-        BrandResponseDto response = brandService.getBrandById(id);
+        BrandResponseDto response = brandServiceImpl.getBrandById(id);
         return ResponseEntity.ok(response);
     }
 }
