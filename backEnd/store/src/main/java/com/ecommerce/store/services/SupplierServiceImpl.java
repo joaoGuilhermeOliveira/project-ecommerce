@@ -2,11 +2,13 @@ package com.ecommerce.store.services;
 
 import com.ecommerce.store.entities.Supplier;
 import com.ecommerce.store.enums.StatusEnum;
-import com.ecommerce.store.exceptions.supplier.InvalidSupplierException;
-import com.ecommerce.store.exceptions.supplier.SupplierNotFoundException;
+import com.ecommerce.store.exceptions.InvalidEntityException;
+import com.ecommerce.store.exceptions.NotFoundException;
 import com.ecommerce.store.repositories.SupplierRepository;
 import com.ecommerce.store.services.mapper.SupplierMapper;
 import com.ecommerce.store.web.dtos.requests.SupplierRequestDto;
+import com.ecommerce.store.web.dtos.responses.SupplierResponseDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -18,33 +20,43 @@ public class SupplierServiceImpl implements SupplierService{
     @Autowired
     SupplierRepository supplierRepository;
 
-    @Override
-    public Supplier createSupplier(SupplierRequestDto supplierRequestDto) {
+    @Autowired
+    private SupplierMapper supplierMapper;
+
+    public void createSupplier(SupplierRequestDto supplierRequestDto) {
         try {
-            SupplierMapper mapper = new SupplierMapper();
-            Supplier supplier = mapper.toEntity(supplierRequestDto);
+            Supplier supplier = supplierMapper.toEntity(supplierRequestDto);
             supplier.setStatus(StatusEnum.ACTIVE);
-            return supplierRepository.save(supplier);
+            supplierRepository.save(supplier);
         } catch (DataIntegrityViolationException e) {
-            throw new InvalidSupplierException("Erro ao criar fornecedor: " + e.getMessage());
+            throw new InvalidEntityException("Erro ao criar fornecedor: " + e.getMessage());
         }
     }
 
-    @Override
-    public Supplier getSupplierByCnpj(String cnpj) {
-        return supplierRepository.findByCnpj(cnpj).orElseThrow(() -> new SupplierNotFoundException("Fornecedor não encontrado com CNPJ: " + cnpj));
+    public SupplierResponseDto getSupplierByCnpj(String cnpj) {
+        Supplier supplier = supplierRepository.findByCnpj(cnpj)
+                .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado com CNPJ: " + cnpj));
+        return supplierMapper.toDto(supplier);
     }
 
-    @Override
     public List<Supplier> getAllSuppliers() {
         return supplierRepository.findAll();
     }
 
-    @Override
     public void deleteSupplierByCnpj(String cnpj) {
         Supplier supplier = supplierRepository.findByCnpj(cnpj)
-                .orElseThrow(() -> new SupplierNotFoundException("Fornecedor não encontrado com CNPJ: " + cnpj));
+                .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado com CNPJ: " + cnpj));
 
         supplierRepository.delete(supplier);
+    }
+
+    public SupplierResponseDto getSupplierById(Long id) {
+        Supplier supplier = getSupplierEntityById(id);
+        return supplierMapper.toDto(supplier);
+    }
+
+    public Supplier getSupplierEntityById(Long id) {
+        return supplierRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado"));
     }
 }
