@@ -3,6 +3,7 @@ package com.ecommerce.store.services;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.store.entities.Brand;
+import com.ecommerce.store.exceptions.NotFoundException;
 import com.ecommerce.store.repositories.BrandRepository;
 import com.ecommerce.store.services.mapper.BrandMapper;
 import com.ecommerce.store.web.dtos.requests.BrandRequestDto;
@@ -26,5 +27,10 @@ public class BrandService {
     public BrandResponseDto getBrandById(Long id) {
         Brand brand = brandRepository.findById(id).orElse(null);
         return brandMapper.toDto(brand);
+    }
+
+    public Brand getBrandEntityById(Long id) {
+        return brandRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Marca não encontrada"));
     }
 }

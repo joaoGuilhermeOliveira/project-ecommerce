@@ -49,4 +49,14 @@ public class SupplierService {
 
         supplierRepository.delete(supplier);
     }
+
+    public SupplierResponseDto getSupplierById(Long id) {
+        Supplier supplier = getSupplierEntityById(id);
+        return supplierMapper.toDto(supplier);
+    }
+
+    public Supplier getSupplierEntityById(Long id) {
+        return supplierRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado"));
+    }
 }
