@@ -1,50 +1,48 @@
 package com.ecommerce.store.web.controllers;
 
+import com.ecommerce.store.web.dtos.requests.CustomerUpdateStatusRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.ecommerce.store.entities.Customer;
-import com.ecommerce.store.services.CustomerService;
-import com.ecommerce.store.services.mapper.CustomerMapper;
-import com.ecommerce.store.web.dtos.request.CustomerDto;
+import com.ecommerce.store.services.CustomerServiceImpl;
+import com.ecommerce.store.web.dtos.requests.CustomerRequestDto;
+import com.ecommerce.store.web.dtos.responses.CustomerResponseDto;
 
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
 
-    private final CustomerService customerService;
-    private final CustomerMapper customerMapper;
+    private final CustomerServiceImpl customerServiceImpl;
 
     @Autowired
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
-        this.customerMapper = new CustomerMapper();
+    public CustomerController(CustomerServiceImpl customerServiceImpl) {
+        this.customerServiceImpl = customerServiceImpl;
     }
 
     @PostMapping
-    public ResponseEntity<String> createCustomer(@RequestBody CustomerDto customer) {
-        customerService.createCustomer(customerMapper.toEntity(customer));
+    public ResponseEntity<String> createCustomer(@RequestBody CustomerRequestDto customer) {
+        customerServiceImpl.createCustomer(customer);
         return ResponseEntity.status(201).body("Customer created successfully!");
     }
 
     @GetMapping
-    public ResponseEntity<CustomerDto> getCustomerByCpf(@RequestParam String cpf) {
-        CustomerDto response = customerMapper.toDto(customerService.getCustomerByCpf(cpf));
-        return ResponseEntity.ok(response);
+    public ResponseEntity<CustomerResponseDto> getCustomerByCpf(@RequestParam String cpf) {
+        CustomerResponseDto response = customerServiceImpl.getCustomerByCpf(cpf);
+        return ResponseEntity.ok().body(response);
     }
 
     @PatchMapping
-    public ResponseEntity<String> updateCustomerByCpf(@RequestParam String cpf, @RequestBody CustomerDto updateCustomer) {
-        Customer customer = customerMapper.toEntity(updateCustomer);
-        customerService.updateCustomerByCpf(cpf, customer);
-        
+    public ResponseEntity<String> updateCustomerByCpf(@RequestParam String cpf, @RequestBody CustomerRequestDto updateCustomer) {
+        customerServiceImpl.updateCustomerByCpf(cpf, updateCustomer);
         return ResponseEntity.status(200).body("Customer updated successfully!");
     }
+
+    @PutMapping("/{cpf}/status")
+    public ResponseEntity<Void> updateStatus(@PathVariable String cpf,
+                                             @RequestBody CustomerUpdateStatusRequestDto updateStatus) {
+        customerServiceImpl.updateStatusByCpf(cpf, updateStatus);
+        return ResponseEntity.noContent().build();
+    }
+
 }
