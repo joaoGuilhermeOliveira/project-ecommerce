@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.ecommerce.store.entities.Address;
 import com.ecommerce.store.entities.Customer;
 import com.ecommerce.store.enums.StatusEnum;
+import com.ecommerce.store.exceptions.InvalidEntityException;
+import com.ecommerce.store.exceptions.NotFoundException;
 import com.ecommerce.store.repositories.CustomerRepository;
 import com.ecommerce.store.services.mapper.CustomerMapper;
 import com.ecommerce.store.web.dtos.responses.CustomerResponseDto;
@@ -14,7 +16,7 @@ import com.ecommerce.store.web.dtos.requests.CustomerRequestDto;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CustomerServiceImpl implements CustomerService{
+public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
@@ -35,6 +37,9 @@ public class CustomerServiceImpl implements CustomerService{
     @Override
     public CustomerResponseDto getCustomerByCpf(String cpf) {
         Customer customer = customerRepository.findByCpf(cpf);
+        if (customer == null) {
+            throw new NotFoundException("Customer not found with CPF: " + cpf);
+        }
         return customerMapper.toDto(customer);
     }
 
@@ -42,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService{
     public void updateCustomerByCpf(String cpf, CustomerRequestDto updateCustomerDto) {
         Customer customer = customerRepository.findByCpf(cpf);
         if (customer == null) {
-            throw new IllegalArgumentException("Customer with CPF " + cpf + " not found.");
+            throw new NotFoundException("Customer with CPF " + cpf + " not found.");
         }
         updateCustomer(customer, updateCustomerDto);
     }
@@ -52,18 +57,18 @@ public class CustomerServiceImpl implements CustomerService{
         Customer customer = customerRepository.findByCpf(cpf);
 
         if (customer == null) {
-            throw new IllegalArgumentException("Customer with CPF " + cpf + " not found.");
+            throw new NotFoundException("Customer with CPF " + cpf + " not found.");
         }
 
-        if (updateStatus.getStatus() == null) {
-            throw new IllegalArgumentException("Status must be provided.");
+        if (updateStatus.getStatus() == null || updateStatus.getStatus().isBlank()) {
+            throw new InvalidEntityException("Status must be provided.");
         }
 
         StatusEnum newStatus;
         try {
             newStatus = StatusEnum.valueOf(updateStatus.getStatus().toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid status: " + updateStatus.getStatus());
+            throw new InvalidEntityException("Invalid status: " + updateStatus.getStatus());
         }
 
         customer.setStatus(newStatus);
@@ -75,7 +80,8 @@ public class CustomerServiceImpl implements CustomerService{
         customer.setEmail(updateCustomer.getEmail() != null ? updateCustomer.getEmail() : customer.getEmail());
         customer.setPhone(updateCustomer.getPhone() != null ? updateCustomer.getPhone() : customer.getPhone());
         customer.setAddress(this.updateCustomerAddress(customer, updateCustomer.getAddress()));
-        customer.setBirthDate(updateCustomer.getBirthDate() != null ? updateCustomer.getBirthDate() : customer.getBirthDate());
+        customer.setBirthDate(
+                updateCustomer.getBirthDate() != null ? updateCustomer.getBirthDate() : customer.getBirthDate());
 
         customerRepository.save(customer);
     }
@@ -86,21 +92,15 @@ public class CustomerServiceImpl implements CustomerService{
         if (updateCustomerAddress == null) {
             return address;
         }
-
         address.setCity(updateCustomerAddress.getCity() != null ? updateCustomerAddress.getCity() : address.getCity());
-
         address.setDistrict(updateCustomerAddress.getDistrict() != null ? updateCustomerAddress.getDistrict()
                 : address.getDistrict());
-
         address.setState(
                 updateCustomerAddress.getState() != null ? updateCustomerAddress.getState() : address.getState());
-
         address.setStreet(
                 updateCustomerAddress.getStreet() != null ? updateCustomerAddress.getStreet() : address.getStreet());
-
         address.setNumber(
                 updateCustomerAddress.getNumber() != null ? updateCustomerAddress.getNumber() : address.getNumber());
-
         address.setZipCode(
                 updateCustomerAddress.getZipCode() != null ? updateCustomerAddress.getZipCode() : address.getZipCode());
 

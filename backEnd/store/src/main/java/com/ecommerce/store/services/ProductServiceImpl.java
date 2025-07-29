@@ -55,14 +55,14 @@ public class ProductServiceImpl implements ProductService {
             product.setStatus(ProductStatusEnum.ACTIVE);
             productRepository.save(product);
         } catch (DataIntegrityViolationException e) {
-            throw new InvalidEntityException("Erro ao criar produto: " + e.getMessage());
+            throw new InvalidEntityException("Error creating product " + e.getMessage());
         }
     }
 
     @Override
     public ProductResponseDto getProductById(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Produto não encontrado com ID: " + id));
+                .orElseThrow(() -> new NotFoundException("Product not found with ID: " + id));
         BrandResponseDto brand = brandService.getBrandById(product.getBrand().getId());
         CategoryResponseDto category = categoryService.getCategoryById(product.getCategory().getId());
         SupplierResponseDto supplier = supplierService.getSupplierById(product.getSupplier().getId());
