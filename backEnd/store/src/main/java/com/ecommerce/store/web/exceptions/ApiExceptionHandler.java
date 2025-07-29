@@ -1,5 +1,6 @@
 package com.ecommerce.store.web.exceptions;
 
+import com.ecommerce.store.exceptions.ConflictException;
 import com.ecommerce.store.exceptions.InvalidEntityException;
 import com.ecommerce.store.exceptions.NotFoundException;
 
@@ -33,5 +34,15 @@ public class ApiExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, ex.getMessage()));
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ErrorMessage> handleConflictException(ConflictException ex,
+            HttpServletRequest request) {
+        log.error("Api Error - ", ex);
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.CONFLICT, ex.getMessage()));
     }
 }

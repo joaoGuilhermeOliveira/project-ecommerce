@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.store.entities.Category;
+import com.ecommerce.store.exceptions.ConflictException;
 import com.ecommerce.store.exceptions.InvalidEntityException;
 import com.ecommerce.store.exceptions.NotFoundException;
 import com.ecommerce.store.repositories.CategoryRepository;
@@ -25,22 +26,32 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public void createCategory(CategoryRequestDto categoryRequestDto) {
+        if (categoryRequestDto == null || categoryRequestDto.getName() == null
+                || categoryRequestDto.getName().isBlank()) {
+            throw new InvalidEntityException("Category name must be provided.");
+        }
+
+        if (categoryRepository.existsByNameIgnoreCase(categoryRequestDto.getName())) {
+            throw new ConflictException("Category already exists with name: " + categoryRequestDto.getName());
+        }
+
         try {
             Category category = categoryMapper.toEntity(categoryRequestDto);
             categoryRepository.save(category);
         } catch (DataIntegrityViolationException e) {
-            throw new InvalidEntityException("Erro ao criar categoria: " + e.getMessage());
+            throw new ConflictException(
+                    "Category violates unique constraints: " + e.getMostSpecificCause().getMessage());
         }
     }
 
     public CategoryResponseDto getCategoryById(Long id) {
         CategoryResponseDto response = categoryMapper.toDto(categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Categoria não encontrada com ID: " + id)));
+                .orElseThrow(() -> new NotFoundException("Category not found with ID " + id)));
         return response;
     }
 
     public Category getCategoryEntityById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Categoria não encontrada"));
+                .orElseThrow(() -> new NotFoundException("Category not found"));
     }
 }

@@ -29,13 +29,13 @@ public class SupplierServiceImpl implements SupplierService{
             supplier.setStatus(StatusEnum.ACTIVE);
             supplierRepository.save(supplier);
         } catch (DataIntegrityViolationException e) {
-            throw new InvalidEntityException("Erro ao criar fornecedor: " + e.getMessage());
+            throw new InvalidEntityException("Error creating supplier: " + e.getMessage());
         }
     }
 
     public SupplierResponseDto getSupplierByCnpj(String cnpj) {
         Supplier supplier = supplierRepository.findByCnpj(cnpj)
-                .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado com CNPJ: " + cnpj));
+                .orElseThrow(() -> new NotFoundException("Supplier not found with CNPJ: " + cnpj));
         return supplierMapper.toDto(supplier);
     }
 
@@ -45,7 +45,7 @@ public class SupplierServiceImpl implements SupplierService{
 
     public void deleteSupplierByCnpj(String cnpj) {
         Supplier supplier = supplierRepository.findByCnpj(cnpj)
-                .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado com CNPJ: " + cnpj));
+                .orElseThrow(() -> new NotFoundException("Supplier not found with CNPJ: " + cnpj));
 
         supplierRepository.delete(supplier);
     }
@@ -57,6 +57,6 @@ public class SupplierServiceImpl implements SupplierService{
 
     public Supplier getSupplierEntityById(Long id) {
         return supplierRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Supplier not found"));
     }
 }
