@@ -1,5 +1,8 @@
 package com.ecommerce.store.services;
 
+import com.ecommerce.store.entities.Customer;
+import com.ecommerce.store.enums.StatusEnum;
+import com.ecommerce.store.web.dtos.requests.UpdateStatusRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -69,5 +72,29 @@ public class ProductServiceImpl implements ProductService {
         response.setCategory(category);
         response.setSupplier(supplier);
         return response;
+    }
+
+    @Override
+    public void updateStatusById(String id, UpdateStatusRequestDto updateStatus) {
+
+        Product product = productRepository.findById(Long.parseLong(id)).orElseThrow(() -> new RuntimeException("Product not found"));
+
+        if (product == null) {
+            throw new IllegalArgumentException("Product with id " + id + " not found.");
+        }
+
+        if (updateStatus.getStatus() == null) {
+            throw new IllegalArgumentException("Status must be provided.");
+        }
+
+        ProductStatusEnum newStatus;
+        try {
+            newStatus = ProductStatusEnum.valueOf(updateStatus.getStatus().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid status: " + updateStatus.getStatus());
+        }
+
+        product.setStatus(newStatus);
+        productRepository.save(product);
     }
 }

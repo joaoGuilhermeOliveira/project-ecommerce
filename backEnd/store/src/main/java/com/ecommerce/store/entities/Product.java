@@ -4,14 +4,7 @@ import java.sql.Blob;
 
 import com.ecommerce.store.enums.ProductStatusEnum;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,10 +29,10 @@ public class Product {
     @Column(name = "sell_price", nullable = false, length = 10)
     private String sellPrice;
 
-    @Column(name = "description", nullable = true, length = 500)
+    @Column(name = "description", length = 500)
     private String description;
 
-    @Column(name = "image", nullable = true)
+    @Column(name = "image")
     private Blob image;
 
     @Column(name = "gtin", nullable = false, length = 14)
@@ -58,5 +51,6 @@ public class Product {
     private Brand brand;
 
     @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private ProductStatusEnum status;
 }

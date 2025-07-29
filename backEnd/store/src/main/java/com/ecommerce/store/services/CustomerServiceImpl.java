@@ -1,6 +1,6 @@
 package com.ecommerce.store.services;
 
-import com.ecommerce.store.web.dtos.requests.CustomerUpdateStatusRequestDto;
+import com.ecommerce.store.web.dtos.requests.UpdateStatusRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ecommerce.store.entities.Address;
@@ -53,7 +53,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void updateStatusByCpf(String cpf, CustomerUpdateStatusRequestDto updateStatus) {
+    public void updateStatusByCpf(String cpf, UpdateStatusRequestDto updateStatus) {
         Customer customer = customerRepository.findByCpf(cpf);
 
         if (customer == null) {
