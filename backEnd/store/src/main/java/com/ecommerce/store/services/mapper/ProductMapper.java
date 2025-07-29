@@ -38,7 +38,6 @@ public class ProductMapper {
         product.setGtin(productRequestDto.getGtin());
         Brand brand = brandRepository.findById(productRequestDto.getBrandId()).orElseThrow();
         product.setBrand(brand);
-
         return product;
     }
 

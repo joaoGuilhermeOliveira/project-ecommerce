@@ -1,6 +1,6 @@
 package com.ecommerce.store.web.controllers;
 
-import com.ecommerce.store.web.dtos.requests.CustomerUpdateStatusRequestDto;
+import com.ecommerce.store.web.dtos.requests.UpdateStatusRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +40,7 @@ public class CustomerController {
 
     @PutMapping("/{cpf}/status")
     public ResponseEntity<Void> updateStatus(@PathVariable String cpf,
-                                             @RequestBody CustomerUpdateStatusRequestDto updateStatus) {
+                                             @RequestBody UpdateStatusRequestDto updateStatus) {
         customerServiceImpl.updateStatusByCpf(cpf, updateStatus);
         return ResponseEntity.noContent().build();
     }
