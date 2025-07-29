@@ -1,13 +1,9 @@
 package com.ecommerce.store.web.controllers;
 
+import com.ecommerce.store.web.dtos.requests.UpdateStatusRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ecommerce.store.services.ProductServiceImpl;
 import com.ecommerce.store.web.dtos.requests.ProductRequestDto;
@@ -16,7 +12,7 @@ import com.ecommerce.store.web.dtos.responses.ProductResponseDto;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    
+
     private final ProductServiceImpl productServiceImpl;
 
     @Autowired
@@ -34,5 +30,12 @@ public class ProductController {
     public ResponseEntity<ProductResponseDto> getProductById(@RequestParam Long id) {
         ProductResponseDto response = productServiceImpl.getProductById(id);
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<Void> updateStatus(@PathVariable String id,
+                                             @RequestBody UpdateStatusRequestDto updateStatus) {
+        productServiceImpl.updateStatusById(id, updateStatus);
+        return ResponseEntity.noContent().build();
     }
 }
