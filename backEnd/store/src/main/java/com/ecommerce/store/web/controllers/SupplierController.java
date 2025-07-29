@@ -20,10 +20,11 @@ public class SupplierController {
     private final SupplierMapper supplierMapper;
 
     @Autowired
-    public SupplierController(SupplierServiceImpl supplierServiceImpl) {
+    public SupplierController(SupplierServiceImpl supplierServiceImpl, SupplierMapper supplierMapper) {
         this.supplierServiceImpl = supplierServiceImpl;
-        this.supplierMapper = new SupplierMapper();
+        this.supplierMapper = supplierMapper;
     }
+
     @PostMapping
     public ResponseEntity<String> createSupplier(@RequestBody SupplierRequestDto supplierCreateDto) {
         supplierServiceImpl.createSupplier(supplierCreateDto);
@@ -32,21 +33,20 @@ public class SupplierController {
 
     @GetMapping("/{cnpj}")
     public ResponseEntity<SupplierResponseDto> getUserByCnpj(@PathVariable String cnpj) {
-        Supplier supplier = supplierServiceImpl.getSupplierByCnpj(cnpj);
+        SupplierResponseDto supplier = supplierServiceImpl.getSupplierByCnpj(cnpj);
         if (supplier == null) {
             return ResponseEntity.notFound().build();
         }
-        SupplierResponseDto response = supplierMapper.toDto(supplier);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(supplier);
     }
 
     @DeleteMapping("/{cnpj}")
     public ResponseEntity<String> deleteSupplier(@PathVariable String cnpj) {
-        Supplier supplier = supplierServiceImpl.getSupplierByCnpj(cnpj);
+        SupplierResponseDto supplier = supplierServiceImpl.getSupplierByCnpj(cnpj);
         if (supplier == null) {
             return ResponseEntity.notFound().build();
         }
-            supplierServiceImpl.deleteSupplierByCnpj(cnpj);
+        supplierServiceImpl.deleteSupplierByCnpj(cnpj);
         return ResponseEntity.ok("Supplier deleted successfully");
     }
 

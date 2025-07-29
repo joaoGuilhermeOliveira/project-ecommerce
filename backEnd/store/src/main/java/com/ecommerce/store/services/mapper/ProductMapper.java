@@ -17,12 +17,6 @@ import com.ecommerce.store.entities.Supplier;
 
 @Component
 public class ProductMapper {
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private SupplierRepository supplierRepository;
-    @Autowired
-    private BrandRepository brandRepository;
 
     public Product toEntity(ProductRequestDto productRequestDto) {
         Product product = new Product();
@@ -30,14 +24,9 @@ public class ProductMapper {
         product.setDescription(productRequestDto.getDescription());
         product.setCostPrice(productRequestDto.getCostPrice());
         product.setSellPrice(productRequestDto.getSellPrice());
-        Category category = categoryRepository.findById(productRequestDto.getCategoryId()).orElseThrow();
-        product.setCategory(category);
-        Supplier supplier = supplierRepository.findById(productRequestDto.getSupplierId()).orElseThrow();
-        product.setSupplier(supplier);
         product.setImage(productRequestDto.getImage());
         product.setGtin(productRequestDto.getGtin());
-        Brand brand = brandRepository.findById(productRequestDto.getBrandId()).orElseThrow();
-        product.setBrand(brand);
+
         return product;
     }
 
@@ -47,29 +36,10 @@ public class ProductMapper {
         productDto.setDescription(product.getDescription());
         productDto.setCostPrice(product.getCostPrice());
         productDto.setSellPrice(product.getSellPrice());
-        productDto.setCategory(this.buildCategoryDto(product.getCategory()));
-        productDto.setSupplier(this.buildSupplierDto(product.getSupplier()));
         productDto.setImage(product.getImage());
         productDto.setGtin(product.getGtin());
         productDto.setStatus(product.getStatus());
 
         return productDto;
     }
-
-    private CategoryResponseDto buildCategoryDto(Category category) {
-        CategoryResponseDto categoryDto = new CategoryResponseDto();
-        categoryDto.setName(category.getName());
-        return categoryDto;
-    }
-
-    private SupplierResponseDto buildSupplierDto(Supplier supplier) {
-        SupplierResponseDto supplierDto = new SupplierResponseDto();
-        supplierDto.setCnpj(supplier.getCnpj());
-        supplierDto.setName(supplier.getName());
-        supplierDto.setPhone_number(supplier.getPhone_number());
-        supplierDto.setEmail(supplier.getEmail());
-        return supplierDto;
-    }
-
-    
 }
