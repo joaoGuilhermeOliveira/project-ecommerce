@@ -3,13 +3,12 @@ package com.ecommerce.store.entities;
 import com.ecommerce.store.enums.StatusEnum;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "customer")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Customer {

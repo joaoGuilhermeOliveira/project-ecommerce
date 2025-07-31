@@ -19,15 +19,23 @@ public class AuthService {
 
     public boolean authenticate(LoginRequestDto loginRequestDto) {
         Customer customer = customerRepository.findByEmail(loginRequestDto.getEmail());
-        if(Objects.equals(loginRequestDto.getPassword(), loginRequestDto.getConfirmPassword())){
-            return customer != null && customer.getPassword().equals(loginRequestDto.getPassword());
+
+        if (customer == null) {
+            return false;
         }
-        return false;
+
+        if (customer.getStatus().name().equals("INACTIVE")) {
+            return false;
+        }
+
+        return customer.getPassword().equals(loginRequestDto.getPassword());
     }
+
 
 
     public boolean resetPassword(ResetPasswordDto resetPasswordDto) {
         Customer customer = customerRepository.findByEmail(resetPasswordDto.getEmail());
+
         if (customer != null) {
             if (Objects.equals(resetPasswordDto.getPassword(), resetPasswordDto.getConfirmPassword())) {
                 customer.setPassword(resetPasswordDto.getPassword());
