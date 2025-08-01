@@ -35,7 +35,7 @@ public class Product {
     @Column(name = "image")
     private Blob image;
 
-    @Column(name = "gtin", nullable = false, length = 14)
+    @Column(name = "gtin", nullable = false, unique = true, length = 14)
     private String gtin;
 
     @JoinColumn(name = "category_category_id", nullable = false)
