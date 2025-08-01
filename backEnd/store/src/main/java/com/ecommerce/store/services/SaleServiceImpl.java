@@ -2,6 +2,7 @@ package com.ecommerce.store.services;
 
 import com.ecommerce.store.entities.Customer;
 import com.ecommerce.store.entities.Sale;
+import com.ecommerce.store.exceptions.InvalidEntityException;
 import com.ecommerce.store.repositories.CustomerRepository;
 import com.ecommerce.store.repositories.SaleRepository;
 import com.ecommerce.store.services.mapper.SaleMapper;
@@ -26,7 +27,7 @@ public class SaleServiceImpl implements SaleService{
     @Override
     public Sale createSale(SaleRequestDto saleRequestDto) {
         Customer customer = customerRepository.findById(saleRequestDto.getCustomerId())
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+                .orElseThrow(() -> new InvalidEntityException("Customer not found: " + saleRequestDto.getCustomerId()));
         Sale sale = saleMapper.toEntity(saleRequestDto);
         sale.setSaleData(new java.util.Date());
         sale.setCustomer(customer);
@@ -36,7 +37,7 @@ public class SaleServiceImpl implements SaleService{
     @Override
     public Sale getSaleById(Long saleId) {
         return saleRepository.findById(saleId)
-                .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
+                .orElseThrow(() -> new RuntimeException("Sale not found" + saleId));
     }
 
     @Override
