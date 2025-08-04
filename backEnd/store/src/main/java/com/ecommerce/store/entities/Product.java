@@ -1,6 +1,7 @@
 package com.ecommerce.store.entities;
 
 import java.sql.Blob;
+import java.util.List;
 
 import com.ecommerce.store.enums.ProductStatusEnum;
 
@@ -53,4 +54,7 @@ public class Product {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private ProductStatusEnum status;
+
+    @OneToMany(mappedBy = "product")
+    private List<SaleItem> productSales;
 }

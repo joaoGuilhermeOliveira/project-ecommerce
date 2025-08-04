@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ecommerce.store.enums.PaymentMethodEnum;
 
@@ -39,4 +40,7 @@ public class Sale {
     @ManyToOne
     @JoinColumn(name = "customer_customer_id")
     private Customer customer;
+
+    @OneToMany(mappedBy = "sale")
+    private List<SaleItem> productSales;
 }
