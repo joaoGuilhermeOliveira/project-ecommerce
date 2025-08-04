@@ -2,6 +2,7 @@ package com.ecommerce.store.services;
 
 import com.ecommerce.store.entities.Supplier;
 import com.ecommerce.store.enums.StatusEnum;
+import com.ecommerce.store.exceptions.ConflictException;
 import com.ecommerce.store.exceptions.InvalidEntityException;
 import com.ecommerce.store.exceptions.NotFoundException;
 import com.ecommerce.store.repositories.SupplierRepository;
@@ -24,6 +25,9 @@ public class SupplierServiceImpl implements SupplierService{
     private SupplierMapper supplierMapper;
 
     public void createSupplier(SupplierRequestDto supplierRequestDto) {
+        if(supplierRepository.existsByCnpj(supplierRequestDto.getCnpj())) {
+            throw new ConflictException("Supplier with CNPJ " + supplierRequestDto.getCnpj() + " already exists.");
+        }
         try {
             Supplier supplier = supplierMapper.toEntity(supplierRequestDto);
             supplier.setStatus(StatusEnum.ACTIVE);

@@ -1,11 +1,8 @@
 package com.ecommerce.store.services;
 
-import com.ecommerce.store.entities.Customer;
-import com.ecommerce.store.enums.StatusEnum;
 import com.ecommerce.store.web.dtos.requests.UpdateStatusRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.store.entities.Brand;
@@ -22,7 +19,6 @@ import com.ecommerce.store.web.dtos.responses.BrandResponseDto;
 import com.ecommerce.store.web.dtos.responses.CategoryResponseDto;
 import com.ecommerce.store.web.dtos.responses.ProductResponseDto;
 import com.ecommerce.store.web.dtos.responses.SupplierResponseDto;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ProductServiceImpl implements ProductService {

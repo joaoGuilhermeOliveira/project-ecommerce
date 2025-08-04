@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.ecommerce.store.entities.Address;
 import com.ecommerce.store.entities.Customer;
 import com.ecommerce.store.enums.StatusEnum;
+import com.ecommerce.store.exceptions.ConflictException;
 import com.ecommerce.store.exceptions.InvalidEntityException;
 import com.ecommerce.store.exceptions.NotFoundException;
 import com.ecommerce.store.repositories.CustomerRepository;
@@ -29,6 +30,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void createCustomer(CustomerRequestDto customerRequestDto) {
+        if(customerRepository.existsByCpf(customerRequestDto.getCpf())) {
+            throw new ConflictException("Customer with CPF " + customerRequestDto.getCpf() + " already exists.");
+        }
         Customer customer = customerMapper.toEntity(customerRequestDto);
         customer.setStatus(StatusEnum.ACTIVE);
         customerRepository.save(customer);
