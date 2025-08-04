@@ -1,9 +1,15 @@
 package com.ecommerce.store.entities;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import com.ecommerce.store.enums.StatusEnum;
 
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.Email;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "customer")
@@ -21,9 +27,11 @@ public class Customer {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
+    @CPF(message = "Invalid CPF")
     @Column(name = "cpf", nullable = false, unique = true, length = 14)
     private String cpf;
 
+    @Email(message = "Email inválido")
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 

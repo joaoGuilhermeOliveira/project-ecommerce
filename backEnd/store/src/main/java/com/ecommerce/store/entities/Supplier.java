@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.br.CNPJ;
+
 import com.ecommerce.store.enums.StatusEnum;
 
 @Entity
@@ -18,6 +20,7 @@ public class Supplier implements Serializable {
     @Column(name = "supplierId",nullable = false)
     private Long id;
 
+    @CNPJ(message = "Invalid CNPJ")
     @Column(name = "cnpj", nullable = false, length = 14)
     private String cnpj;
 
