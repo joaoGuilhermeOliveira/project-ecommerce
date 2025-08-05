@@ -3,6 +3,7 @@ package com.ecommerce.store.web.dtos.responses;
 import com.ecommerce.store.enums.PaymentMethodEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import com.ecommerce.store.web.dtos.SaleItemDto;
 
 import java.util.Date;
 import java.util.List;
@@ -24,6 +25,6 @@ public class SaleResponseDto {
 
     private String totalPrice;
 
-    private List<ProductHasSaleResponseDto> items;
+    private List<SaleItemDto> SaleItems;
 
 }

@@ -8,7 +8,7 @@ public class ProductHasSaleResponseDto {
     private Long productId;
     private String productName;
     private Integer quantity;
-    private String unityPrice;
+    private String unitPrice;
     private String paymentMethod;
 
 }

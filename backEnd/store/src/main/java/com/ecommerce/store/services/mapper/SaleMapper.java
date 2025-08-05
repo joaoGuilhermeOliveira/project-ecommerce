@@ -2,6 +2,7 @@ package com.ecommerce.store.services.mapper;
 
 import com.ecommerce.store.entities.Customer;
 import com.ecommerce.store.entities.Sale;
+import com.ecommerce.store.web.dtos.SaleItemDto;
 import com.ecommerce.store.web.dtos.requests.SaleRequestDto;
 import com.ecommerce.store.web.dtos.responses.ProductHasSaleResponseDto;
 import com.ecommerce.store.web.dtos.responses.SaleResponseDto;
@@ -15,12 +16,12 @@ import java.util.List;
 public class SaleMapper {
 
     @Autowired
-    private ProductHasSaleMapper productHasSaleMapper;
+    private SaleItemMapper saleItemMapper;
 
     public Sale toEntity(SaleRequestDto dto) {
         Sale sale = new Sale();
         sale.setFreightPrice(dto.getFreightPrice());
-        sale.setTotalPice(dto.getTotalPrice());
+        sale.setTotalPrice(dto.getTotalPrice());
         sale.setPaymentMethod(dto.getPaymentMethod());
         sale.setSaleValue(dto.getSaleValue());
 
@@ -37,17 +38,17 @@ public class SaleMapper {
         SaleResponseDto dto = new SaleResponseDto();
         dto.setSaleData(entity.getSaleData());
         dto.setFreightPrice(entity.getFreightPrice());
-        dto.setTotalPrice(entity.getTotalPice());
+        dto.setTotalPrice(entity.getTotalPrice());
         dto.setSaleValue(entity.getSaleValue());
         dto.setPaymentMethod(entity.getPaymentMethod());
         dto.setId(entity.getId());
 
-        if (entity.getProductSales() != null) {
-            List<ProductHasSaleResponseDto> items = entity.getProductSales()
+        if (entity.getSaleItems() != null) {
+            List<SaleItemDto> items = entity.getSaleItems()
                     .stream()
-                    .map(productHasSaleMapper::toDto)
+                    .map(saleItemMapper::toDto)
                     .toList();
-            dto.setItems(items);
+            dto.setSaleItems(items);
         }
 
         return dto;

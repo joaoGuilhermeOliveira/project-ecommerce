@@ -11,7 +11,6 @@ public class SaleItemId implements Serializable {
     private Long productId;
     private Long saleId;
 
-    // equals() e hashCode() são obrigatórios
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

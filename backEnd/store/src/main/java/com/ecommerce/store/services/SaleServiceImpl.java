@@ -10,9 +10,9 @@ import com.ecommerce.store.repositories.CustomerRepository;
 import com.ecommerce.store.repositories.ProductHasSaleRepository;
 import com.ecommerce.store.repositories.ProductRepository;
 import com.ecommerce.store.repositories.SaleRepository;
-import com.ecommerce.store.services.mapper.ProductHasSaleMapper;
+import com.ecommerce.store.services.mapper.SaleItemMapper;
 import com.ecommerce.store.services.mapper.SaleMapper;
-import com.ecommerce.store.web.dtos.requests.ProductHasSaleRequestDto;
+import com.ecommerce.store.web.dtos.SaleItemDto;
 import com.ecommerce.store.web.dtos.requests.SaleRequestDto;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class SaleServiceImpl implements SaleService{
     private ProductHasSaleRepository productHasSaleRepository;
 
     @Autowired
-    private ProductHasSaleMapper productHasSaleMapper;
+    private SaleItemMapper saleItemMapper;
 
     @Override
     @Transactional
@@ -53,19 +53,15 @@ public class SaleServiceImpl implements SaleService{
 
         Sale savedSale = saleRepository.save(sale);
 
-        for (ProductHasSaleRequestDto itemDto : saleRequestDto.getItems()) {
+        for (SaleItemDto itemDto : saleRequestDto.getItems()) {
             Product product = productRepository.findById(itemDto.getProductId())
                     .orElseThrow(() -> new RuntimeException("Product not found: " + itemDto.getProductId()));
 
-            SaleItem item = productHasSaleMapper.toEntity(itemDto);
+            SaleItem item = saleItemMapper.toEntity(itemDto);
 
-            SaleItemId id = new SaleItemId();
-            id.setProductId(product.getId());
-            id.setSaleId(savedSale.getId());
-
-            item.setId(id);
             item.setProduct(product);
             item.setSale(savedSale);
+            item.setSubtotal(String.valueOf(item.getQuantity() * Double.parseDouble(item.getUnitPrice())));
 
             productHasSaleRepository.save(item);
         }
