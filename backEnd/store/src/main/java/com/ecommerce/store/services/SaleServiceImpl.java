@@ -15,7 +15,7 @@ import com.ecommerce.store.web.dtos.SaleItemDto;
 import com.ecommerce.store.web.dtos.requests.SaleRequestDto;
 import com.ecommerce.store.web.dtos.responses.SaleResponseDto;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,29 +23,34 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 public class SaleServiceImpl implements SaleService{
 
-    @Autowired
-    private SaleRepository saleRepository;
+    private final SaleRepository saleRepository;
+    private final CustomerRepository customerRepository;
+    private final SaleMapper saleMapper;
+    private final ProductRepository productRepository;
+    private final ProductHasSaleRepository productHasSaleRepository;
+    private final SaleItemMapper saleItemMapper;
 
-    @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private SaleMapper saleMapper;
-
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private ProductHasSaleRepository productHasSaleRepository;
-
-    @Autowired
-    private SaleItemMapper saleItemMapper;
-
+    public SaleServiceImpl(
+            SaleRepository saleRepository,
+            CustomerRepository customerRepository,
+            SaleMapper saleMapper,
+            ProductRepository productRepository,
+            ProductHasSaleRepository productHasSaleRepository,
+            SaleItemMapper saleItemMapper) {
+        this.saleRepository = saleRepository;
+        this.customerRepository = customerRepository;
+        this.saleMapper = saleMapper;
+        this.productRepository = productRepository;
+        this.productHasSaleRepository = productHasSaleRepository;
+        this.saleItemMapper = saleItemMapper;
+    }
     @Override
     @Transactional
     public SaleResponseDto createSale(SaleRequestDto saleRequestDto) {
+        log.info("Creating sale for customer ID: {}", saleRequestDto.getCustomerId());
         Customer customer = customerRepository.findById(saleRequestDto.getCustomerId())
                 .orElseThrow(() -> new InvalidEntityException("Customer not found: " + saleRequestDto.getCustomerId()));
 
@@ -55,12 +60,15 @@ public class SaleServiceImpl implements SaleService{
         Sale savedSale = saleRepository.save(sale);
 
         processSaleItems(saleRequestDto.getItems(), savedSale);
+        log.info("Sale created successfully with ID: {}", savedSale.getId());
 
         return saleMapper.toDto(savedSale);
     }
 
     @Override
     public SaleResponseDto getSaleById(Long saleId) {
+        log.info("Fetching sale with ID: {}", saleId);
+
         Sale sale = saleRepository.findById(saleId)
                 .orElseThrow(() -> new RuntimeException("Sale not found" + saleId));
 
@@ -69,6 +77,8 @@ public class SaleServiceImpl implements SaleService{
 
     @Override
     public List<SaleResponseDto> getAllSales() {
+        log.info("Fetching all sales");
+
         return saleRepository.findAll()
                 .stream()
                 .map(saleMapper::toDto)
