@@ -1,6 +1,7 @@
 package com.ecommerce.store.services;
 
 import com.ecommerce.store.web.dtos.requests.UpdateStatusRequestDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ecommerce.store.entities.Address;
@@ -17,6 +18,7 @@ import com.ecommerce.store.web.dtos.requests.CustomerRequestDto;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
@@ -30,18 +32,25 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void createCustomer(CustomerRequestDto customerRequestDto) {
-        if(customerRepository.existsByCpf(customerRequestDto.getCpf())) {
+        log.info("Creating customer with CPF: {}", customerRequestDto.getCpf());
+
+        if (customerRepository.existsByCpf(customerRequestDto.getCpf())) {
+            log.warn("Customer with CPF {} already exists.", customerRequestDto.getCpf());
             throw new ConflictException("Customer with CPF " + customerRequestDto.getCpf() + " already exists.");
         }
         Customer customer = customerMapper.toEntity(customerRequestDto);
         customer.setStatus(StatusEnum.ACTIVE);
         customerRepository.save(customer);
+        log.info("Customer created successfully: {}", customer.getCpf());
     }
 
     @Override
     public CustomerResponseDto getCustomerByCpf(String cpf) {
+        log.info("Fetching customer with CPF: {}", cpf);
+
         Customer customer = customerRepository.findByCpf(cpf);
         if (customer == null) {
+            log.warn("Customer not found with CPF: {}", cpf);
             throw new NotFoundException("Customer not found with CPF: " + cpf);
         }
         return customerMapper.toDto(customer);
@@ -49,22 +58,30 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void updateCustomerByCpf(String cpf, CustomerRequestDto updateCustomerDto) {
+        log.info("Updating customer data with CPF: {}", cpf);
+
         Customer customer = customerRepository.findByCpf(cpf);
         if (customer == null) {
+            log.warn("Customer with CPF {} not found for update.", cpf);
             throw new NotFoundException("Customer with CPF " + cpf + " not found.");
         }
         updateCustomer(customer, updateCustomerDto);
+        log.info("Customer updated successfully: {}", cpf);
     }
 
     @Override
     public void updateStatusByCpf(String cpf, UpdateStatusRequestDto updateStatus) {
+        log.info("Updating status for customer with CPF: {}", cpf);
+
         Customer customer = customerRepository.findByCpf(cpf);
 
         if (customer == null) {
+            log.warn("Customer with CPF {} not found for status update.", cpf);
             throw new NotFoundException("Customer with CPF " + cpf + " not found.");
         }
 
         if (updateStatus.getStatus() == null || updateStatus.getStatus().isBlank()) {
+            log.warn("Invalid status received for customer with CPF: {}", cpf);
             throw new InvalidEntityException("Status must be provided.");
         }
 
@@ -72,11 +89,13 @@ public class CustomerServiceImpl implements CustomerService {
         try {
             newStatus = StatusEnum.valueOf(updateStatus.getStatus().toUpperCase());
         } catch (IllegalArgumentException e) {
+            log.error("Invalid status provided: {}", updateStatus.getStatus());
             throw new InvalidEntityException("Invalid status: " + updateStatus.getStatus());
         }
 
         customer.setStatus(newStatus);
         customerRepository.save(customer);
+        log.info("Customer status for {} updated to {}", cpf, newStatus);
     }
 
     private void updateCustomer(Customer customer, CustomerRequestDto updateCustomer) {
