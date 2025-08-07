@@ -33,16 +33,16 @@ public class CustomerController {
     }
 
     @PatchMapping
-    public ResponseEntity<String> updateCustomerByCpf(@RequestParam String cpf, @RequestBody CustomerRequestDto updateCustomer) {
+    public ResponseEntity<String> updateCustomerByCpf(@RequestParam String cpf,
+            @RequestBody CustomerRequestDto updateCustomer) {
         customerServiceImpl.updateCustomerByCpf(cpf, updateCustomer);
         return ResponseEntity.status(200).body("Customer updated successfully!");
     }
 
     @PutMapping("/{cpf}/status")
     public ResponseEntity<Void> updateStatus(@PathVariable String cpf,
-                                             @RequestBody UpdateStatusRequestDto updateStatus) {
+            @RequestBody UpdateStatusRequestDto updateStatus) {
         customerServiceImpl.updateStatusByCpf(cpf, updateStatus);
         return ResponseEntity.noContent().build();
     }
-
 }

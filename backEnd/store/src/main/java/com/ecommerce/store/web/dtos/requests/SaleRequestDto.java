@@ -3,9 +3,10 @@ package com.ecommerce.store.web.dtos.requests;
 import com.ecommerce.store.enums.PaymentMethodEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import com.ecommerce.store.web.dtos.SaleItemDto;
 
 import java.util.Date;
-
+import java.util.List;
 
 @Data
 public class SaleRequestDto {
@@ -22,5 +23,7 @@ public class SaleRequestDto {
     private PaymentMethodEnum paymentMethod;
 
     private Long customerId;
+
+    private List<SaleItemDto> items;
 
 }

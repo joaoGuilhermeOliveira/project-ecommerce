@@ -26,28 +26,23 @@ public class SaleController {
 
     @PostMapping
     public ResponseEntity<SaleResponseDto> createSale(@RequestBody SaleRequestDto saleRequestDto) {
-        Sale sale = saleServiceImpl.createSale(saleRequestDto);
-        SaleResponseDto response = saleMapper.toDto(sale);
+        SaleResponseDto response = saleServiceImpl.createSale(saleRequestDto);
         return ResponseEntity.status(201).body(response);
     }
 
     @GetMapping("/{saleId}")
     public ResponseEntity<SaleResponseDto> getSaleById(@PathVariable Long saleId) {
-        Sale sale = saleServiceImpl.getSaleById(saleId);
-        if (sale == null) {
+        SaleResponseDto response = saleServiceImpl.getSaleById(saleId);
+        if (response == null) {
             return ResponseEntity.notFound().build();
         }
-        SaleResponseDto response = saleMapper.toDto(sale);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
     public ResponseEntity<List<SaleResponseDto>> getSales(){
-        List<Sale> sales = saleServiceImpl.getAllSales();
-        List<SaleResponseDto> response = sales.stream()
-                .map(saleMapper::toDto)
-                .toList();
-        return ResponseEntity.ok(response);
+        List<SaleResponseDto> responses = saleServiceImpl.getAllSales();
+        return ResponseEntity.ok(responses);
     }
 
 
