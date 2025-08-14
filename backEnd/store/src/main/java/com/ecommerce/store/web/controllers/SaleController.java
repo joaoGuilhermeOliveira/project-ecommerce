@@ -16,12 +16,10 @@ import java.util.List;
 public class SaleController {
 
     private final SaleServiceImpl saleServiceImpl;
-    private final SaleMapper saleMapper;
 
     @Autowired
     public SaleController(SaleServiceImpl saleServiceImpl) {
         this.saleServiceImpl = saleServiceImpl;
-        this.saleMapper = new SaleMapper();
     }
 
     @PostMapping
