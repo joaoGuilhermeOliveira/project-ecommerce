@@ -1,6 +1,5 @@
 package com.ecommerce.store.services;
 
-import com.ecommerce.store.entities.Customer;
 import com.ecommerce.store.entities.Product;
 import com.ecommerce.store.entities.Sale;
 import com.ecommerce.store.entities.SaleItem;
@@ -46,7 +45,7 @@ public class SaleServiceImpl implements SaleService{
     @Override
     @Transactional
     public SaleResponseDto createSale(SaleRequestDto saleRequestDto) {
-        Customer customer = customerRepository.findById(saleRequestDto.getCustomerId())
+        customerRepository.findById(saleRequestDto.getCustomerId())
                 .orElseThrow(() -> new InvalidEntityException("Customer not found: " + saleRequestDto.getCustomerId()));
 
         Sale sale = saleMapper.toEntity(saleRequestDto);
