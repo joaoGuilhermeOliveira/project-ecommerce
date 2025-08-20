@@ -3,6 +3,7 @@ package com.ecommerce.store.services;
 
 import com.ecommerce.store.web.dtos.requests.LoginRequestDto;
 import com.ecommerce.store.web.dtos.requests.ResetPasswordDto;
+import com.ecommerce.store.web.dtos.responses.KeycloakTokenResponseDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,18 +20,19 @@ public class AuthService {
     @Autowired
     private KeycloakService keycloakService;
 
-    public boolean authenticate(LoginRequestDto loginRequestDto) {
+    public KeycloakTokenResponseDto authenticate(LoginRequestDto loginRequestDto) {
         Customer customer = customerRepository.findByEmail(loginRequestDto.getEmail());
 
-        if (customer == null) {
-            return false;
+        if (customer == null || customer.getStatus().name().equals("INACTIVE") && !validateCredentials(customer.getEmail(), customer.getPassword())) {
+            return null;
         }
 
-        if (customer.getStatus().name().equals("INACTIVE")) {
-            return false;
-        }
+        KeycloakTokenResponseDto tokenResponse = keycloakService.getToken(
+            loginRequestDto.getEmail(),
+            loginRequestDto.getPassword()
+        );
 
-        return customer.getPassword().equals(loginRequestDto.getPassword()) && keycloakService.getToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()) != null;
+        return tokenResponse;
     }
 
     public boolean resetPassword(ResetPasswordDto resetPasswordDto) {
@@ -45,4 +47,9 @@ public class AuthService {
         }
         return false;
     }
+
+    private boolean validateCredentials(String email, String password) {
+        Customer customer = customerRepository.findByEmail(email);
+        return customer != null && customer.getPassword().equals(password);
+}
 }
