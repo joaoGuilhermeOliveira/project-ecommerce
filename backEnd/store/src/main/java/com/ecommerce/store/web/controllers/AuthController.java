@@ -2,6 +2,8 @@
 package com.ecommerce.store.web.controllers;
 
 import com.ecommerce.store.web.dtos.requests.ResetPasswordDto;
+import com.ecommerce.store.web.dtos.responses.KeycloakTokenResponseDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +19,8 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequestDto) {
-        boolean authenticated = authService.authenticate(loginRequestDto);
-        if (authenticated) {
+        KeycloakTokenResponseDto authenticated = authService.authenticate(loginRequestDto);
+        if (authenticated != null) {
             return ResponseEntity.ok("Login realizado com sucesso!");
         } else {
             return ResponseEntity.status(401).body("Credenciais inválidas.");

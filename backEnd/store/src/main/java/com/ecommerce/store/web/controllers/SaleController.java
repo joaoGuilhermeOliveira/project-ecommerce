@@ -1,8 +1,6 @@
 package com.ecommerce.store.web.controllers;
 
-import com.ecommerce.store.entities.Sale;
 import com.ecommerce.store.services.SaleServiceImpl;
-import com.ecommerce.store.services.mapper.SaleMapper;
 import com.ecommerce.store.web.dtos.requests.SaleRequestDto;
 import com.ecommerce.store.web.dtos.responses.SaleResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +14,10 @@ import java.util.List;
 public class SaleController {
 
     private final SaleServiceImpl saleServiceImpl;
-    private final SaleMapper saleMapper;
 
     @Autowired
     public SaleController(SaleServiceImpl saleServiceImpl) {
         this.saleServiceImpl = saleServiceImpl;
-        this.saleMapper = new SaleMapper();
     }
 
     @PostMapping
