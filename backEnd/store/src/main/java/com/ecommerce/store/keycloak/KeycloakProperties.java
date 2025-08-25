@@ -10,4 +10,6 @@ public class KeycloakProperties {
     private String tokenUrl;
     private String clientId;
     private String clientSecret;
+    private String createUserUrl;
+    private String adminTokenUrl;
 }

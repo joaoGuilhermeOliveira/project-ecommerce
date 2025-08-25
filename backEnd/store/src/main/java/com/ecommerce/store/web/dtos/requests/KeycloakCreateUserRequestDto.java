@@ -9,7 +9,7 @@ public class KeycloakCreateUserRequestDto {
     private String username;
     private String firstName;
     private String lastName;
-    private boolean enabled;
+    private boolean enabled = true;
     private boolean emailVerified = true;
     private CredentialsDto credentials[];
 }
