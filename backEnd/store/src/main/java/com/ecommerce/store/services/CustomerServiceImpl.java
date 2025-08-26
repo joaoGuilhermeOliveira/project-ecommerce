@@ -15,6 +15,7 @@ import com.ecommerce.store.services.mapper.CustomerMapper;
 import com.ecommerce.store.web.dtos.responses.CustomerResponseDto;
 import com.ecommerce.store.web.dtos.requests.CustomerRequestDto;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,26 +24,32 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
-
+    private final KeycloakService keycloakService;
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper,KeycloakService keycloakService) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
+        this.keycloakService = keycloakService;
     }
 
     @Override
     public void createCustomer(CustomerRequestDto customerRequestDto) {
-        log.info("Creating customer with CPF: {}", customerRequestDto.getCpf());
+        ResponseEntity<String> keycloakResponse = keycloakService.createUser(
+                customerRequestDto.getCpf(),
+                customerRequestDto.getName(),
+                customerRequestDto.getLastName(),
+                customerRequestDto.getPassword(),
+                customerRequestDto.getEmail()
+        );
 
-        if (customerRepository.existsByCpf(customerRequestDto.getCpf())) {
-            log.warn("Customer with CPF {} already exists.", customerRequestDto.getCpf());
-            throw new ConflictException("Customer with CPF " + customerRequestDto.getCpf() + " already exists.");
+        log.info("Creating customer with CPF: {}", customerRequestDto.getCpf());
+        if (keycloakResponse.getStatusCodeValue() == 201) {
+            customerRepository.save(customerMapper.toEntity(customerRequestDto));
+        } else {
+            throw new RuntimeException("Erro ao criar usuário no Keycloak: " + keycloakResponse.getBody());
         }
-        Customer customer = customerMapper.toEntity(customerRequestDto);
-        customer.setStatus(StatusEnum.ACTIVE);
-        customerRepository.save(customer);
-        log.info("Customer created successfully: {}", customer.getCpf());
     }
+
 
     @Override
     public CustomerResponseDto getCustomerByCpf(String cpf) {
