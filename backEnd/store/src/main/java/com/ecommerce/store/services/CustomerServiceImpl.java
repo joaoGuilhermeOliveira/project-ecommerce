@@ -47,7 +47,8 @@ public class CustomerServiceImpl implements CustomerService {
             log.warn("Customer with email {} already exists.", customerRequestDto.getEmail());
             throw new ConflictException("Customer with email " + customerRequestDto.getEmail() + " already exists.");
         }
-        ResponseEntity<String> keycloakResponse = keycloakService.createUser(
+        else {
+            ResponseEntity<String> keycloakResponse = keycloakService.createUser(
                 customerRequestDto.getCpf(),
                 customerRequestDto.getName(),
                 customerRequestDto.getLastName(),
@@ -62,6 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         } else {
             throw new RuntimeException("Erro ao criar usuário no Keycloak: " + keycloakResponse.getBody());
+        }
         }
     }
 
