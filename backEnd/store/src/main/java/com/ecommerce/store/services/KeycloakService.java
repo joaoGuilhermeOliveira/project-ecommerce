@@ -11,7 +11,11 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.ecommerce.store.keycloak.KeycloakProperties;
+import com.ecommerce.store.web.dtos.CredentialsDto;
+import com.ecommerce.store.web.dtos.requests.KeycloakCreateUserRequestDto;
 import com.ecommerce.store.web.dtos.responses.KeycloakTokenResponseDto;
+
+import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +33,6 @@ public class KeycloakService {
 
     public KeycloakTokenResponseDto getToken(String username, String password) {
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-        System.out.println(properties.getClientId() + " " + properties.getClientSecret() + " " + properties.getTokenUrl());
         formData.add("grant_type", "password");
         formData.add("client_id", properties.getClientId());
         formData.add("client_secret", properties.getClientSecret());
@@ -45,48 +48,60 @@ public class KeycloakService {
                 .block();
     }
 
+    public ResponseEntity<String> createUser(String username, String firstName, String lastName, String password,
+            String email) {
+        String token = this.getAdminAccessToken();
 
-    private String getAdminAccessToken() {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8081/realms/master/protocol/openid-connect/token";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        KeycloakCreateUserRequestDto createKeycloakUserRequest = buildCreateUserRequest(username, firstName, lastName,
+                password, email);
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("client_id", "admin-cli");
-        params.add("username", "admin");
-        params.add("password", "admin");
-        params.add("grant_type", "password");
-
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-        ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
-
-        return (String) response.getBody().get("access_token");
+        return webClient.post()
+            .uri(properties.getCreateUserUrl())
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(createKeycloakUserRequest)
+            .exchangeToMono(response ->
+                    response.bodyToMono(String.class)
+                            .defaultIfEmpty("")
+                            .map(body -> ResponseEntity.status(response.statusCode()).body(body))
+            )
+            .block();
     }
 
-    public ResponseEntity<String> createUser(String username, String firstName, String lastName, String password, String email) {
-        String token = getAdminAccessToken();
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8081/admin/realms/ecommerce/users";
+    private String getAdminAccessToken() {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("client_id", "admin-cli");
+        params.add("username", properties.getAdminUsername());
+        params.add("password", properties.getAdminPassword());
+        params.add("grant_type", "password");
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
+        KeycloakTokenResponseDto response = webClient.post()
+                .uri(properties.getAdminTokenUrl())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .bodyValue(params)
+                .retrieve()
+                .bodyToMono(KeycloakTokenResponseDto.class)
+                .block();
+        return response.getAccessToken();
+    }
 
-        Map<String, Object> user = new HashMap<>();
-        user.put("username", username);
-        user.put("firstName", firstName);
-        user.put("lastName", lastName);
-        user.put("email", email);
-        user.put("enabled", true);
+    private KeycloakCreateUserRequestDto buildCreateUserRequest(String username, String firstName, String lastName,
+            String password,
+            String email) {
+        KeycloakCreateUserRequestDto request = new KeycloakCreateUserRequestDto();
+        request.setUsername(username);
+        request.setFirstName(firstName);
+        request.setLastName(lastName);
+        request.setEmail(email);
+        request.setEnabled(true);
+        request.setEmailVerified(true);
 
-        Map<String, Object> credentials = new HashMap<>();
-        credentials.put("type", "password");
-        credentials.put("value", password);
-        credentials.put("temporary", false);
-        user.put("credentials", new Object[]{credentials});
+        CredentialsDto credentials = new CredentialsDto();
+        credentials.setType("password");
+        credentials.setValue(password);
+        credentials.setTemporary(false);
+        request.setCredentials(new CredentialsDto[] { credentials });
 
-        HttpEntity<Map<String, Object>> request = new HttpEntity<>(user, headers);
-        return restTemplate.postForEntity(url, request, String.class, "ecommerce");
+        return request;
     }
 }
