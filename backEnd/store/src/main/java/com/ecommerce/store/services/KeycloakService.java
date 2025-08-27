@@ -1,24 +1,17 @@
 package com.ecommerce.store.services;
 
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.ecommerce.store.keycloak.KeycloakProperties;
 import com.ecommerce.store.web.dtos.CredentialsDto;
 import com.ecommerce.store.web.dtos.requests.KeycloakCreateUserRequestDto;
 import com.ecommerce.store.web.dtos.responses.KeycloakTokenResponseDto;
-
-import reactor.core.publisher.Mono;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class KeycloakService {
