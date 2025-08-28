@@ -1,17 +1,27 @@
 package com.ecommerce.store.services;
 
+import com.ecommerce.store.web.dtos.requests.UpdateUserKeyclokRequest;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.ecommerce.store.keycloak.KeycloakProperties;
 import com.ecommerce.store.web.dtos.CredentialsDto;
 import com.ecommerce.store.web.dtos.requests.KeycloakCreateUserRequestDto;
 import com.ecommerce.store.web.dtos.responses.KeycloakTokenResponseDto;
+
+import reactor.core.publisher.Mono;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class KeycloakService {
@@ -97,4 +107,41 @@ public class KeycloakService {
 
         return request;
     }
+
+    public void updateKeycloakUser(String keycloakId, UpdateUserKeyclokRequest request) {
+        String token = getAdminAccessToken();
+
+        Map<String, Object> updatePayload = new HashMap<>();
+        if (request.getFirstName() != null) updatePayload.put("firstName", request.getFirstName());
+        if (request.getLastName() != null)  updatePayload.put("lastName", request.getLastName());
+        if (request.getEmail() != null)     updatePayload.put("email", request.getEmail());
+
+        webClient.put()
+                .uri(properties.getPutUserUrl() + "/" + keycloakId)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(updatePayload)
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+    }
+
+    public String getKeycloakUserId(String emailOrUsername) {
+        String token = getAdminAccessToken();
+        String url = properties.getPutUserUrl() + "?email=" + emailOrUsername;
+
+        List<Map<String, Object>> users = webClient.get()
+                .uri(url)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
+                .block();
+
+        if (users == null || users.isEmpty()) {
+            throw new RuntimeException("Usuário não encontrado no Keycloak");
+        }
+
+        return (String) users.get(0).get("id");
+    }
+
 }

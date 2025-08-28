@@ -1,6 +1,7 @@
 package com.ecommerce.store.services;
 
 import com.ecommerce.store.web.dtos.requests.UpdateStatusRequestDto;
+import com.ecommerce.store.web.dtos.requests.UpdateUserKeyclokRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -130,6 +131,19 @@ public class CustomerServiceImpl implements CustomerService {
                 updateCustomer.getBirthDate() != null ? updateCustomer.getBirthDate() : customer.getBirthDate());
 
         customerRepository.save(customer);
+        try {
+            String keycloakId = keycloakService.getKeycloakUserId(updateCustomer.getEmail());
+
+            UpdateUserKeyclokRequest kcRequest = new UpdateUserKeyclokRequest();
+            kcRequest.setFirstName(updateCustomer.getName());
+            kcRequest.setLastName(updateCustomer.getLastName());
+            kcRequest.setEmail(updateCustomer.getEmail());
+
+            keycloakService.updateKeycloakUser(keycloakId, kcRequest);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar usuário no Keycloak: " + e.getMessage());
+        }
     }
 
     private Address updateCustomerAddress(Customer customer, Address updateCustomerAddress) {

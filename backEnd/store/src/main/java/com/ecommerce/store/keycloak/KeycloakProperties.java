@@ -8,6 +8,7 @@ import lombok.Data;
 @ConfigurationProperties(prefix = "keycloak")
 public class KeycloakProperties {
     private String tokenUrl;
+    private String putUserUrl;
     private String clientId;
     private String clientSecret;
     private String createUserUrl;
