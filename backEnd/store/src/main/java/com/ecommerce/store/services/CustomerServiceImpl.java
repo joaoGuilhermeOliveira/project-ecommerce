@@ -132,14 +132,12 @@ public class CustomerServiceImpl implements CustomerService {
 
         customerRepository.save(customer);
         try {
-            String keycloakId = keycloakService.getKeycloakUserId(updateCustomer.getEmail());
-
             UpdateUserKeyclokRequest kcRequest = new UpdateUserKeyclokRequest();
             kcRequest.setFirstName(updateCustomer.getName());
             kcRequest.setLastName(updateCustomer.getLastName());
             kcRequest.setEmail(updateCustomer.getEmail());
 
-            keycloakService.updateKeycloakUser(keycloakId, kcRequest);
+            keycloakService.updateKeycloakUser(customer.getEmail(), kcRequest);
 
         } catch (Exception e) {
             throw new RuntimeException("Erro ao atualizar usuário no Keycloak: " + e.getMessage());

@@ -2,26 +2,22 @@ package com.ecommerce.store.services;
 
 import com.ecommerce.store.web.dtos.requests.UpdateUserKeyclokRequest;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.ecommerce.store.keycloak.KeycloakProperties;
 import com.ecommerce.store.web.dtos.CredentialsDto;
 import com.ecommerce.store.web.dtos.requests.KeycloakCreateUserRequestDto;
 import com.ecommerce.store.web.dtos.responses.KeycloakTokenResponseDto;
+import com.ecommerce.store.web.dtos.responses.UserKeycloakResponseDto;
 
-import reactor.core.publisher.Mono;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class KeycloakService {
@@ -59,16 +55,34 @@ public class KeycloakService {
                 password, email);
 
         return webClient.post()
-            .uri(properties.getCreateUserUrl())
-            .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(createKeycloakUserRequest)
-            .exchangeToMono(response ->
-                    response.bodyToMono(String.class)
-                            .defaultIfEmpty("")
-                            .map(body -> ResponseEntity.status(response.statusCode()).body(body))
-            )
-            .block();
+                .uri(properties.getCreateUserUrl())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(createKeycloakUserRequest)
+                .exchangeToMono(response -> response.bodyToMono(String.class)
+                        .defaultIfEmpty("")
+                        .map(body -> ResponseEntity.status(response.statusCode()).body(body)))
+                .block();
+    }
+
+    public void updateKeycloakUser(String email, UpdateUserKeyclokRequest request) {
+        String token = getAdminAccessToken();
+
+        UserKeycloakResponseDto user = this.getKeycloakUser(email);
+
+        user.setFirstName(
+                Objects.requireNonNullElse(request.getFirstName(), user.getFirstName()));
+        user.setLastName(Objects.requireNonNullElse(request.getLastName(), user.getLastName()));
+        user.setEmail(Objects.requireNonNullElse(request.getEmail(), user.getEmail()));
+
+        webClient.put()
+                .uri(properties.getPutUserUrl() + "/" + user.getId())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(user)
+                .retrieve()
+                .toBodilessEntity()
+                .block();
     }
 
     private String getAdminAccessToken() {
@@ -108,40 +122,22 @@ public class KeycloakService {
         return request;
     }
 
-    public void updateKeycloakUser(String keycloakId, UpdateUserKeyclokRequest request) {
+    private UserKeycloakResponseDto getKeycloakUser(String email) {
         String token = getAdminAccessToken();
 
-        Map<String, Object> updatePayload = new HashMap<>();
-        if (request.getFirstName() != null) updatePayload.put("firstName", request.getFirstName());
-        if (request.getLastName() != null)  updatePayload.put("lastName", request.getLastName());
-        if (request.getEmail() != null)     updatePayload.put("email", request.getEmail());
-
-        webClient.put()
-                .uri(properties.getPutUserUrl() + "/" + keycloakId)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(updatePayload)
+        List<UserKeycloakResponseDto> users = webClient.get()
+                .uri(properties.getUsersUrl() + "?email=" + email)
+                .header("Authorization", "Bearer " + token)
                 .retrieve()
-                .toBodilessEntity()
-                .block();
-    }
-
-    public String getKeycloakUserId(String emailOrUsername) {
-        String token = getAdminAccessToken();
-        String url = properties.getPutUserUrl() + "?email=" + emailOrUsername;
-
-        List<Map<String, Object>> users = webClient.get()
-                .uri(url)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
+                .bodyToMono(new ParameterizedTypeReference<List<UserKeycloakResponseDto>>() {
+                })
                 .block();
 
         if (users == null || users.isEmpty()) {
             throw new RuntimeException("Usuário não encontrado no Keycloak");
         }
 
-        return (String) users.get(0).get("id");
+        return users.get(0);
     }
 
 }
