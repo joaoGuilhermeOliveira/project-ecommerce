@@ -11,7 +11,7 @@ public class CustomerMapper {
     
     public Customer toEntity(CustomerRequestDto customerRequestDto) {
         Customer customer = new Customer();
-        customer.setName(customerRequestDto.getName());
+        customer.setName(customerRequestDto.getName() + " " + customerRequestDto.getLastName());
         customer.setCpf(customerRequestDto.getCpf());
         customer.setEmail(customerRequestDto.getEmail());
         customer.setAddress(customerRequestDto.getAddress());

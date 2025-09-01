@@ -18,13 +18,10 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequestDto) {
+    public KeycloakTokenResponseDto login(@RequestBody LoginRequestDto loginRequestDto) {
         KeycloakTokenResponseDto authenticated = authService.authenticate(loginRequestDto);
-        if (authenticated != null) {
-            return ResponseEntity.ok("Login realizado com sucesso!");
-        } else {
-            return ResponseEntity.status(401).body("Credenciais inválidas.");
-        }
+
+        return authenticated;
     }
 
     @PutMapping("/reset-password")

@@ -1,7 +1,11 @@
 package com.ecommerce.store.services;
 
 import com.ecommerce.store.web.dtos.requests.UpdateStatusRequestDto;
+import com.ecommerce.store.web.dtos.requests.UpdateUserKeyclokRequest;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ecommerce.store.entities.Address;
@@ -15,6 +19,8 @@ import com.ecommerce.store.services.mapper.CustomerMapper;
 import com.ecommerce.store.web.dtos.responses.CustomerResponseDto;
 import com.ecommerce.store.web.dtos.requests.CustomerRequestDto;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,11 +29,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
+    private final KeycloakService keycloakService;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper,
+            KeycloakService keycloakService) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
+        this.keycloakService = keycloakService;
     }
 
     @Override
@@ -38,10 +47,28 @@ public class CustomerServiceImpl implements CustomerService {
             log.warn("Customer with CPF {} already exists.", customerRequestDto.getCpf());
             throw new ConflictException("Customer with CPF " + customerRequestDto.getCpf() + " already exists.");
         }
-        Customer customer = customerMapper.toEntity(customerRequestDto);
-        customer.setStatus(StatusEnum.ACTIVE);
-        customerRepository.save(customer);
-        log.info("Customer created successfully: {}", customer.getCpf());
+        if(customerRepository.existsByEmail(customerRequestDto.getEmail())){
+            log.warn("Customer with email {} already exists.", customerRequestDto.getEmail());
+            throw new ConflictException("Customer with email " + customerRequestDto.getEmail() + " already exists.");
+        }
+        else {
+            ResponseEntity<String> keycloakResponse = keycloakService.createUser(
+                customerRequestDto.getCpf(),
+                customerRequestDto.getName(),
+                customerRequestDto.getLastName(),
+                customerRequestDto.getPassword(),
+                customerRequestDto.getEmail());
+
+        if (keycloakResponse.getStatusCode() == HttpStatus.CREATED) {
+            Customer customer = customerMapper.toEntity(customerRequestDto);
+            customer.setStatus(StatusEnum.ACTIVE);
+            customerRepository.save(customer);
+            log.info("Customer created successfully: {}", customer.getCpf());
+
+        } else {
+            throw new RuntimeException("Erro ao criar usuário no Keycloak: " + keycloakResponse.getBody());
+        }
+        }
     }
 
     @Override
@@ -105,8 +132,21 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setAddress(this.updateCustomerAddress(customer, updateCustomer.getAddress()));
         customer.setBirthDate(
                 updateCustomer.getBirthDate() != null ? updateCustomer.getBirthDate() : customer.getBirthDate());
+        customer.setPassword(Objects.requireNonNullElse(updateCustomer.getPassword(), customer.getPassword()));
 
         customerRepository.save(customer);
+        try {
+            UpdateUserKeyclokRequest kcRequest = new UpdateUserKeyclokRequest();
+            kcRequest.setFirstName(updateCustomer.getName());
+            kcRequest.setLastName(updateCustomer.getLastName());
+            kcRequest.setEmail(updateCustomer.getEmail());
+            kcRequest.setPassword(updateCustomer.getPassword());
+
+            keycloakService.updateKeycloakUser(customer.getEmail(), kcRequest);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar usuário no Keycloak: " + e.getMessage());
+        }
     }
 
     private Address updateCustomerAddress(Customer customer, Address updateCustomerAddress) {

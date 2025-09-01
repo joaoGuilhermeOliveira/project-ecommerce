@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class CustomerRequestDto {
     private String name;
+    private String lastName;
     private String cpf;
     private String email;
     private Address address;
