@@ -3,6 +3,9 @@ package com.ecommerce.store.services;
 import com.ecommerce.store.web.dtos.requests.UpdateStatusRequestDto;
 import com.ecommerce.store.web.dtos.requests.UpdateUserKeyclokRequest;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ecommerce.store.entities.Address;
@@ -129,6 +132,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setAddress(this.updateCustomerAddress(customer, updateCustomer.getAddress()));
         customer.setBirthDate(
                 updateCustomer.getBirthDate() != null ? updateCustomer.getBirthDate() : customer.getBirthDate());
+        customer.setPassword(Objects.requireNonNullElse(updateCustomer.getPassword(), customer.getPassword()));
 
         customerRepository.save(customer);
         try {
@@ -136,6 +140,7 @@ public class CustomerServiceImpl implements CustomerService {
             kcRequest.setFirstName(updateCustomer.getName());
             kcRequest.setLastName(updateCustomer.getLastName());
             kcRequest.setEmail(updateCustomer.getEmail());
+            kcRequest.setPassword(updateCustomer.getPassword());
 
             keycloakService.updateKeycloakUser(customer.getEmail(), kcRequest);
 

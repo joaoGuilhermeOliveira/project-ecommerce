@@ -2,8 +2,7 @@ package com.ecommerce.store.web.dtos.responses;
 
 import java.util.List;
 
-
-import com.ecommerce.store.web.dtos.CredentialDto;
+import com.ecommerce.store.web.dtos.CredentialsDto;
 
 import lombok.Data;
 
@@ -18,5 +17,5 @@ public class UserKeycloakResponseDto {
     private Boolean enabled;
     private Boolean totp;
     private List<String> requiredActions;
-    private List<CredentialDto> credentials;
+    private List<CredentialsDto> credentials;
 }

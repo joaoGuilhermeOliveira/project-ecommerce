@@ -74,7 +74,10 @@ public class KeycloakService {
                 Objects.requireNonNullElse(request.getFirstName(), user.getFirstName()));
         user.setLastName(Objects.requireNonNullElse(request.getLastName(), user.getLastName()));
         user.setEmail(Objects.requireNonNullElse(request.getEmail(), user.getEmail()));
-
+        if (request.getPassword() != null) {
+            user.setCredentials(List.of(
+                    new CredentialsDto("password", request.getPassword(), false)));
+        }
         webClient.put()
                 .uri(properties.getPutUserUrl() + "/" + user.getId())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
