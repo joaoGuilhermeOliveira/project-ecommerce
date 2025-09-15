@@ -1,3 +1,4 @@
 backEnd/.vscode/settings.json
 backEnd/.env
 backEnd/store/src/main/resources/application-docker.properties
+bff/dist

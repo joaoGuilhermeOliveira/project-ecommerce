@@ -1,8 +1,13 @@
-const { PORT } = process.env;
+import * as dotenv from 'dotenv';
+dotenv.config();
 
-const getConfiguration = () => ({
-  port: parseInt(PORT, 10) || 3000,
-});
+const { PORT, HOST, MS_BASE_URL } = process.env;
 
-export default getConfiguration;
-export type Configuration = ReturnType<typeof getConfiguration>;
+export default () => {
+  return {
+    port: parseInt(PORT, 10) || 8083,
+    microServices: {
+      baseUrl: MS_BASE_URL,
+    }
+  };
+};
