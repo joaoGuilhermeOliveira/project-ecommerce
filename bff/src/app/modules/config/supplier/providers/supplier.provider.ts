@@ -11,7 +11,7 @@ export class SuppliersProvider {
         }
 
     async getSupplierByCnpj(cnpj: string, token: string): Promise<GetSupplierResponseDto> {
-        const url = `${this.configService.get('microServices.baseUrl')}/customers`;
+        const url = `${this.configService.get('microServices.baseUrl')}/api/supliers`;
 
         const authorization = `Bearer ${token}`;
 
